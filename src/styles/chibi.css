@@ -1,0 +1,132 @@
+/* ── Chibi kiểu tem giấy: hoạt ảnh nhẹ ────────────────── */
+.char-chibi {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.chibi {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Mặc định đứng yên; chỉ chuyển động khi phần đó đang trên màn hình (.is-visible do watchVisible gắn). */
+.chibi * {
+  animation-play-state: paused;
+}
+
+.char-intro.is-visible .chibi * {
+  animation-play-state: running;
+}
+
+.chibi .breathe {
+  transform-box: view-box;
+  transform-origin: 100px 212px;
+  animation: chibi-breathe 3.4s ease-in-out infinite;
+}
+
+.chibi .head {
+  animation: chibi-bob 3.4s ease-in-out infinite;
+}
+
+.chibi .lid {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+  animation: chibi-blink 4.8s infinite;
+}
+
+.chibi .sway-l,
+.chibi .sway-r {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: chibi-sway 3.4s ease-in-out infinite;
+}
+
+.chibi .sway-r {
+  animation-direction: reverse;
+}
+
+/* Mỗi người chớp mắt lệch nhịp nhau */
+.chibi--obito .lid { animation-delay: -1.2s; }
+.chibi--shisui .lid { animation-delay: -2.3s; }
+.chibi--sasuke .lid { animation-delay: -3.1s; }
+.chibi--madara .lid { animation-delay: -0.6s; }
+
+/* Itachi: quạ bay ngang (giữ trong khung hình để không bay đè lên chữ) */
+.chibi--itachi {
+  overflow: hidden;
+}
+
+.chibi--itachi .crow {
+  animation: chibi-crow 7s linear infinite;
+}
+
+.chibi--itachi .crow .wing {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: chibi-flap 0.35s ease-in-out infinite alternate;
+}
+
+/* Obito: vòng Kamui quay quanh lỗ mắt */
+.chibi--obito .kamui {
+  transform-box: view-box;
+  transform-origin: 118px 98px;
+  animation: chibi-spin 2.6s linear infinite;
+}
+
+/* Shisui: bóng mờ nháy bên cạnh */
+.chibi--shisui .ghost {
+  animation: chibi-ghost 4.6s ease-in-out infinite;
+}
+
+/* Sasuke: tia Chidori lấp lánh */
+.chibi--sasuke .chidori-spark {
+  animation: chibi-spark 0.5s steps(2) infinite;
+}
+
+/* Madara: tóc dài bay, quạt nghiêng */
+.chibi--madara .hair-long {
+  transform-box: view-box;
+  transform-origin: 100px 60px;
+  animation: chibi-hair 4.2s ease-in-out infinite;
+}
+
+.chibi--madara .fan {
+  transform-box: view-box;
+  transform-origin: 40px 204px;
+  animation: chibi-fan 3.8s ease-in-out infinite;
+}
+
+/* Chạm vào: nhún một cái */
+.char-chibi.is-poke .chibi {
+  animation: chibi-poke 0.5s var(--ease-out);
+}
+
+@keyframes chibi-breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.012, 1.022); } }
+@keyframes chibi-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.6px); } }
+@keyframes chibi-blink { 0%, 90%, 100% { transform: scaleY(0); } 93%, 95% { transform: scaleY(1); } }
+@keyframes chibi-sway { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+@keyframes chibi-crow { 0% { transform: translate(230px, 34px); } 45%, 100% { transform: translate(-40px, 6px); } }
+@keyframes chibi-flap { from { transform: scaleY(1); } to { transform: scaleY(-0.6); } }
+@keyframes chibi-spin { to { transform: rotate(360deg); } }
+@keyframes chibi-ghost {
+  0%, 62%, 100% { opacity: 0; transform: translateX(0); }
+  68% { opacity: 0.55; transform: translateX(-14px); }
+  76% { opacity: 0.25; transform: translateX(-8px); }
+  84% { opacity: 0; transform: translateX(0); }
+}
+@keyframes chibi-spark { 0% { opacity: 1; } 50% { opacity: 0.25; } 100% { opacity: 1; } }
+@keyframes chibi-hair { 0%, 100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.2deg); } }
+@keyframes chibi-fan { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(3deg); } }
+@keyframes chibi-poke { 0%, 100% { transform: translateY(0); } 35% { transform: translateY(-10px); } 60% { transform: translateY(2px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .chibi,
+  .chibi * {
+    animation: none !important;
+  }
+}
