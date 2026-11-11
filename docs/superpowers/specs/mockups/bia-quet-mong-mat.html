@@ -1,0 +1,351 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Be+Vietnam+Pro:wght@400;500&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  .uc { --ink:#0c0a0a; --ink2:#151111; --bone:#ebe3d5; --ash:#857a71; --red:#a3141a; --red2:#c21d24; --paper:#ece5d7; --pink:#1b1414; }
+  .uc-wrap { display:grid; grid-template-columns: 330px 1fr; gap: 2.2rem; align-items:start; }
+  @media (max-width: 860px){ .uc-wrap{ grid-template-columns:1fr; } }
+  .uc-col { display:flex; flex-direction:column; align-items:center; gap:.8rem; }
+
+  .uc-phone { width:300px; height:600px; border-radius:30px; background:var(--ink); position:relative; overflow:hidden;
+    border:1px solid #2b2424; box-shadow:0 24px 60px rgba(0,0,0,.35); font-family:'Be Vietnam Pro',system-ui,sans-serif;
+    color:var(--bone); cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent; }
+  .uc-grain { position:absolute; inset:0; pointer-events:none; opacity:.07; z-index:30;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .uc-mono { font-family:'JetBrains Mono',ui-monospace,monospace; letter-spacing:.18em; text-transform:uppercase; }
+  .uc-serif { font-family:'Noto Serif Display',Georgia,serif; }
+  .uc-jp { font-family:'Noto Serif JP',serif; }
+
+  .uc-cover { position:absolute; inset:0; z-index:10; transition:opacity .5s; }
+  .uc-top { position:absolute; top:34px; left:0; right:0; display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .uc-top .uc-mono { font-size:9px; color:var(--ash); }
+  .uc-eye { position:absolute; left:30px; top:120px; width:240px; height:140px; overflow:visible; }
+  .uc-hud { position:absolute; left:48px; top:118px; width:204px; height:144px; opacity:0; transition:opacity .35s; pointer-events:none; }
+  .uc-hud i { position:absolute; width:14px; height:14px; border-color:rgba(235,227,213,.55); border-style:solid; border-width:0; }
+  .uc-hud i:nth-child(1){ left:0; top:0; border-left-width:1px; border-top-width:1px; }
+  .uc-hud i:nth-child(2){ right:0; top:0; border-right-width:1px; border-top-width:1px; }
+  .uc-hud i:nth-child(3){ left:0; bottom:0; border-left-width:1px; border-bottom-width:1px; }
+  .uc-hud i:nth-child(4){ right:0; bottom:0; border-right-width:1px; border-bottom-width:1px; }
+  .uc-scan { position:absolute; left:6px; right:6px; top:0; height:1px; background:var(--red2); opacity:0; }
+  .uc-scan::before { content:''; position:absolute; left:0; right:0; bottom:1px; height:26px; background:linear-gradient(to top, rgba(194,29,36,.22), transparent); }
+  .uc-status { position:absolute; top:284px; left:0; right:0; text-align:center; font-size:9.5px; color:var(--ash); transition:color .3s; }
+  .uc-status.ok { color:var(--bone); }
+  .uc-status b { color:var(--red2); font-weight:600; }
+  .uc-greet { position:absolute; top:318px; left:0; right:0; text-align:center; opacity:0; transform:translateY(8px); transition:opacity .6s, transform .6s; }
+  .uc-greet .l { font-style:italic; font-size:15px; color:var(--ash); }
+  .uc-greet .n { font-size:34px; font-weight:500; margin-top:2px; letter-spacing:.01em; }
+  .uc-btn { position:absolute; top:430px; left:50%; transform:translateX(-50%) translateY(8px); padding:11px 26px; border:1px solid var(--red2);
+    color:var(--bone); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; opacity:0; transition:opacity .6s .25s, transform .6s .25s, background .2s; white-space:nowrap; }
+  .uc-btn:hover { background:rgba(194,29,36,.12); }
+  .uc-show .uc-greet { opacity:1; transform:none; }
+  .uc-show .uc-btn { opacity:1; transform:translateX(-50%); }
+  .uc-foot { position:absolute; bottom:26px; left:0; right:0; text-align:center; font-size:8.5px; color:var(--ash); }
+
+  .uc-ink { position:absolute; inset:0; z-index:20; pointer-events:none; }
+  .uc-inside { position:absolute; inset:0; z-index:5; opacity:0; transition:opacity .7s; overflow:hidden; }
+  .uc-inside.on { opacity:1; }
+  .uc-moon { position:absolute; right:-70px; top:30px; width:230px; height:230px; border-radius:50%; }
+  .uc-in-meta { position:absolute; top:40px; left:24px; font-size:8.5px; color:var(--ash); }
+  .uc-in-name { position:absolute; top:78px; left:24px; line-height:1.02; }
+  .uc-in-name .a { font-size:28px; font-weight:500; }
+  .uc-in-name .b { font-size:42px; font-weight:700; }
+  .uc-in-name .k { font-size:10px; letter-spacing:.32em; margin-top:10px; color:var(--ash); }
+  .uc-frame { position:absolute; left:24px; top:226px; width:158px; height:206px; border:1px solid; display:flex; align-items:center; justify-content:center; }
+  .uc-frame .ph { font-size:8.5px; color:var(--ash); }
+  .uc-hanko { position:absolute; right:-14px; bottom:-14px; width:38px; height:38px; background:var(--red); color:#efe6d8; display:flex; align-items:center; justify-content:center; font-size:21px; font-weight:700; transform:rotate(-4deg); }
+  .uc-vert { position:absolute; right:22px; top:300px; writing-mode:vertical-rl; font-size:12px; letter-spacing:.45em; color:var(--ash); }
+  .uc-deg { position:absolute; top:458px; left:24px; right:24px; }
+  .uc-deg .t { font-size:13.5px; font-weight:500; }
+  .uc-deg .s { font-size:10.5px; color:var(--ash); margin-top:4px; line-height:1.5; }
+  .uc-scroll { position:absolute; bottom:22px; left:24px; font-size:8.5px; color:var(--ash); }
+
+  /* bảng màu bên trong */
+  .uc-pal-a .uc-inside { background:var(--ink); color:var(--bone); }
+  .uc-pal-a .uc-moon { background:radial-gradient(circle at 42% 40%, #9b161c 0%, #7e1015 62%, #5c0b0f 100%); opacity:.92; }
+  .uc-pal-a .uc-frame { border-color:rgba(235,227,213,.28); background:repeating-linear-gradient(135deg, rgba(235,227,213,.035) 0 6px, transparent 6px 12px); }
+  .uc-pal-b .uc-inside { background:var(--paper); color:#141010; }
+  .uc-pal-b .uc-inside .uc-in-meta, .uc-pal-b .uc-inside .uc-in-name .k, .uc-pal-b .uc-inside .uc-deg .s, .uc-pal-b .uc-inside .uc-vert, .uc-pal-b .uc-inside .uc-scroll, .uc-pal-b .uc-frame .ph { color:#776c62; }
+  .uc-pal-b .uc-moon { background:radial-gradient(circle at 45% 45%, rgba(20,16,16,.42) 0%, rgba(20,16,16,.26) 48%, rgba(20,16,16,.06) 72%, transparent 74%); filter:url(#ucWash); }
+  .uc-pal-b .uc-frame { border-color:rgba(20,16,16,.35); background:repeating-linear-gradient(135deg, rgba(20,16,16,.04) 0 6px, transparent 6px 12px); }
+
+  .uc-ctrl { display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; }
+  .uc-ctrl button { font:inherit; font-size:.8rem; padding:.45rem .8rem; border-radius:6px; border:1px solid var(--border); background:var(--bg-secondary); color:var(--text-primary); cursor:pointer; }
+  .uc-ctrl button.on { border-color:var(--accent); color:var(--accent); }
+
+  .uc-steps { list-style:none; margin:0 0 1.6rem; padding:0; counter-reset:s; }
+  .uc-steps li { position:relative; padding:0 0 .9rem 2.2rem; font-size:.9rem; line-height:1.5; }
+  .uc-steps li::before { counter-increment:s; content:counter(s); position:absolute; left:0; top:0; width:1.5rem; height:1.5rem; border-radius:50%; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:.75rem; color:var(--text-secondary); }
+  .uc-steps b { font-weight:600; }
+  .uc-note { font-size:.85rem; color:var(--text-secondary); line-height:1.55; }
+  .uc-sw { display:flex; gap:6px; margin-top:.5rem; }
+  .uc-sw span { width:28px; height:28px; border-radius:6px; border:1px solid rgba(128,128,128,.25); }
+  .uc-type { display:grid; grid-template-columns:auto 1fr; gap:.4rem 1rem; align-items:baseline; font-size:.85rem; margin-top:.6rem; }
+  .uc-type .k { color:var(--text-secondary); font-size:.75rem; }
+</style>
+
+<h2>Bìa thiệp: quét mống mắt</h2>
+<p class="subtitle">Bấm vào điện thoại để chạy thử, bấm tiếp "Mở thư mời" để xem chuyển cảnh vào thiệp. Đây là bản phác để chốt cảm giác, chưa phải bản cuối.</p>
+
+<div class="uc uc-wrap">
+  <div class="uc-col">
+    <div class="uc-phone uc-pal-a" id="ucPhone" aria-label="Bản phác bìa thiệp">
+      <svg width="0" height="0" style="position:absolute">
+        <filter id="ucWash"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="4"/><feDisplacementMap in="SourceGraphic" scale="26"/></filter>
+        <filter id="ucInkEdge"><feTurbulence type="fractalNoise" baseFrequency=".022" numOctaves="3" seed="9"/><feDisplacementMap in="SourceGraphic" scale="46"/></filter>
+      </svg>
+
+      <!-- BÊN TRONG (sau khi mở) -->
+      <div class="uc-inside" id="ucInside">
+        <div class="uc-moon"></div>
+        <div class="uc-in-meta uc-mono">// Lễ tốt nghiệp · 26.11.2026</div>
+        <div class="uc-in-name uc-serif">
+          <div class="a">Nguyễn</div>
+          <div class="b">Tiến Quốc</div>
+          <div class="k uc-jp">グエン・ティエン・クオック</div>
+        </div>
+        <div class="uc-frame"><span class="ph uc-mono">Ảnh chân dung</span><div class="uc-hanko uc-jp">卒</div></div>
+        <div class="uc-vert uc-jp">卒業 二〇二六</div>
+        <div class="uc-deg">
+          <div class="t">Cử nhân Công nghệ Thông tin</div>
+          <div class="s">Trường ĐH Khoa học Tự nhiên – ĐHQG TP.HCM</div>
+        </div>
+        <div class="uc-scroll uc-mono">↓ Cuộn xuống</div>
+      </div>
+
+      <!-- BÌA -->
+      <div class="uc-cover" id="ucCover">
+        <div class="uc-top">
+          <svg width="22" height="28" viewBox="-12 -14 24 30" aria-hidden="true">
+            <path d="M -11 -1 A 11 11 0 1 1 11 -1 Q 0 2.5 -11 -1 Z" fill="#a3141a"/>
+            <path d="M 11 -1 A 11 11 0 0 1 -11 -1 Q 0 2.5 11 -1 Z" fill="#ebe3d5"/>
+            <rect x="-1.7" y="8" width="3.4" height="7" rx="1" fill="#ebe3d5"/>
+          </svg>
+          <div class="uc-mono">Thư mời tốt nghiệp · 2026</div>
+        </div>
+
+        <div class="uc-hud" id="ucHud"><i></i><i></i><i></i><i></i><div class="uc-scan" id="ucScan"></div></div>
+
+        <svg class="uc-eye" viewBox="-120 -70 240 140" aria-hidden="true">
+          <defs><clipPath id="ucClip"><path id="ucClipPath" d=""/></clipPath></defs>
+          <g clip-path="url(#ucClip)">
+            <rect x="-120" y="-70" width="240" height="140" fill="#d9d0c1"/>
+            <g id="ucIris">
+              <circle r="38" id="ucIrisFill" style="fill:#2a2321; transition:fill .7s"/>
+              <circle r="38" fill="none" stroke="#120708" stroke-width="2.2"/>
+              <circle r="22.5" fill="none" stroke="#120708" stroke-width="1.1" id="ucRing" style="opacity:0; transition:opacity .4s"/>
+              <g id="ucTomoe"></g>
+              <g id="ucMange" style="opacity:0"></g>
+              <circle r="8.5" fill="#0a0505" id="ucPupil"/>
+            </g>
+            <rect x="-120" y="-70" width="240" height="140" fill="url(#ucShade)" />
+          </g>
+          <defs>
+            <linearGradient id="ucShade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset=".45" stop-color="#000" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path id="ucLidUp" fill="none" stroke="#ebe3d5" stroke-width="3" stroke-linecap="round"/>
+          <path id="ucLidLo" fill="none" stroke="#ebe3d5" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>
+          <g id="ucLashes" stroke="#ebe3d5" stroke-width="1.6" stroke-linecap="round"></g>
+        </svg>
+
+        <div class="uc-status uc-mono" id="ucStatus">[ Chạm vào mắt để xác thực ]</div>
+        <div class="uc-greet">
+          <div class="l uc-serif">Thân gửi</div>
+          <div class="n uc-serif">Minh Anh</div>
+        </div>
+        <div class="uc-btn" id="ucBtn">Mở thư mời</div>
+        <div class="uc-foot uc-mono">Nguyễn Tiến Quốc — Cử nhân CNTT</div>
+      </div>
+
+      <svg class="uc-ink" id="ucInk" viewBox="0 0 300 600" preserveAspectRatio="none"><circle id="ucInkC" cx="150" cy="190" r="0" fill="#a3141a" filter="url(#ucInkEdge)"/></svg>
+      <div class="uc-grain"></div>
+    </div>
+
+    <div class="uc-ctrl">
+      <button id="ucReplay" type="button">↺ Chạy lại</button>
+      <button id="ucPalA" type="button" class="on">Trong: Đêm trăng đỏ</button>
+      <button id="ucPalB" type="button">Trong: Mực trên giấy</button>
+    </div>
+  </div>
+
+  <div>
+    <h3 style="margin-bottom:.8rem">Khách sẽ thấy gì</h3>
+    <ol class="uc-steps">
+      <li><b>Chờ xác thực.</b> Màn hình tối, một con mắt đang nhắm, dòng chữ nhỏ kiểu máy tính: "Chạm vào mắt để xác thực".</li>
+      <li><b>Quét.</b> Chạm vào thì mắt mở ra, khung ngắm hiện lên, một vạch đỏ quét ngang mống mắt, số % chạy lên.</li>
+      <li><b>Sharingan thức tỉnh.</b> Mống mắt chuyển đỏ, ba tomoe hiện lần lượt, hiện "Đã xác thực" và <b>Thân gửi [tên khách]</b>.</li>
+      <li><b>Vào thiệp.</b> Bấm "Mở thư mời": tomoe xoay nhanh, hoá Mangekyō, mực đỏ loang kín màn hình rồi lộ trang đầu thiệp (tên, ảnh chân dung, ngành). Nhạc bắt đầu phát ở đây.</li>
+    </ol>
+
+    <h3 style="margin-bottom:.4rem">Bên trong thiệp dùng nền nào?</h3>
+    <p class="uc-note" style="margin-bottom:.8rem">Bìa luôn tối. Chọn nền cho phần bên trong (bấm để xem luôn trên điện thoại):</p>
+    <div class="options">
+      <div class="option" data-choice="dem-trang-do" onclick="toggleSelect(this); ucPal('a')">
+        <div class="letter">A</div>
+        <div class="content">
+          <h3>Đêm trăng đỏ</h3>
+          <p>Nền đen mực, trăng đỏ Nguyệt Độc, chữ màu ngà. Liền mạch với bìa, bí ẩn, đậm chất Uchiha.</p>
+          <div class="uc-sw"><span style="background:#0c0a0a"></span><span style="background:#151111"></span><span style="background:#ebe3d5"></span><span style="background:#a3141a"></span><span style="background:#857a71"></span></div>
+        </div>
+      </div>
+      <div class="option" data-choice="muc-tren-giay" onclick="toggleSelect(this); ucPal('b')">
+        <div class="letter">B</div>
+        <div class="content">
+          <h3>Mực trên giấy</h3>
+          <p>Bìa tối, vào trong là giấy ngà, mực đen, dấu triện đỏ. Sáng sủa, dễ đọc cho người lớn tuổi, cảm giác thư pháp.</p>
+          <div class="uc-sw"><span style="background:#ece5d7"></span><span style="background:#141010"></span><span style="background:#776c62"></span><span style="background:#a3141a"></span><span style="background:#0c0a0a"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin:1.6rem 0 .2rem">Chữ</h3>
+    <div class="uc-type uc">
+      <span class="k">Tiêu đề</span><span class="uc-serif" style="font-size:1.35rem">Nguyễn Tiến Quốc</span>
+      <span class="k">Nội dung</span><span style="font-family:'Be Vietnam Pro'">Thân mời bạn đến chung vui trong ngày lễ tốt nghiệp.</span>
+      <span class="k">Chi tiết kỹ thuật</span><span class="uc-mono" style="font-size:.72rem">T−15d 04:12:33 · 10.7626°N 106.6822°E</span>
+      <span class="k">Điểm xuyết</span><span class="uc-jp">卒業 · うちは · 写輪眼</span>
+    </div>
+    <p class="uc-note" style="margin-top:1rem">Chống "nhựa": màu phẳng, không bóng loáng, không viền phát sáng. Chất liệu lấy từ vân giấy, nét mực loang và dấu triện đỏ.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id)
+  const phone = $('ucPhone'), cover = $('ucCover'), inside = $('ucInside')
+  const NS = 'http://www.w3.org/2000/svg'
+  const lerp = (a, b, t) => a + (b - a) * t
+  const ease = (t) => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
+  let state = 'idle', open = 0, spin = 0, spinSpeed = 0, raf = 0, timers = []
+
+  // Tomoe: chấm tròn + đuôi cong, đặt trên vòng r=22.5
+  const TOMOE = 'M 5.2 0 A 5.2 5.2 0 1 1 -5.2 0 C -5.2 -6 -1.5 -11 6.5 -13 C 2.8 -9.5 5.2 -5 5.2 0 Z'
+  for (let i = 0; i < 3; i++) {
+    const p = document.createElementNS(NS, 'path')
+    p.setAttribute('d', TOMOE)
+    p.setAttribute('fill', '#0a0505')
+    p.setAttribute('transform', `rotate(${i * 120}) translate(0 -22.5) rotate(-75)`)
+    p.style.opacity = 0
+    p.style.transition = 'opacity .35s'
+    $('ucTomoe').append(p)
+  }
+  // Mangekyō (kiểu chong chóng ba cánh)
+  const BLADE = 'M -6 -6 C -4 -22 8 -33 26 -29 C 12 -26 6 -16 7 -5 Z'
+  for (let i = 0; i < 3; i++) {
+    const p = document.createElementNS(NS, 'path')
+    p.setAttribute('d', BLADE)
+    p.setAttribute('fill', '#0a0505')
+    p.setAttribute('transform', `rotate(${i * 120})`)
+    $('ucMange').append(p)
+  }
+  const mc = document.createElementNS(NS, 'circle'); mc.setAttribute('r', '12'); mc.setAttribute('fill', '#0a0505'); $('ucMange').append(mc)
+
+  function bez(t, c) { // điểm trên đường cong mí mắt
+    const u = 1 - t
+    return [u*u*u*-110 + 3*u*u*t*-55 + 3*u*t*t*55 + t*t*t*110, 3*u*t*c]
+  }
+  function drawEye() {
+    const up = lerp(16, -60, open), lo = lerp(16, 50, open)
+    $('ucLidUp').setAttribute('d', `M -110 0 C -55 ${up} 55 ${up} 110 0`)
+    $('ucLidLo').setAttribute('d', `M -110 0 C -55 ${lo} 55 ${lo} 110 0`)
+    $('ucClipPath').setAttribute('d', `M -110 0 C -55 ${up} 55 ${up} 110 0 C 55 ${lo} -55 ${lo} -110 0 Z`)
+    const lashes = $('ucLashes'); lashes.innerHTML = ''
+    const la = Math.max(0, 1 - open * 4)
+    if (la > 0) for (const t of [.22, .36, .5, .64, .78]) {
+      const [x, y] = bez(t, 16)
+      const l = document.createElementNS(NS, 'line')
+      const dx = (t - .5) * 10
+      l.setAttribute('x1', x); l.setAttribute('y1', y + 1); l.setAttribute('x2', x + dx); l.setAttribute('y2', y + 10)
+      l.setAttribute('opacity', la); lashes.append(l)
+    }
+    $('ucTomoe').setAttribute('transform', `rotate(${spin})`)
+    $('ucMange').setAttribute('transform', `rotate(${spin})`)
+  }
+  function loop() {
+    spin += spinSpeed
+    drawEye()
+    raf = requestAnimationFrame(loop)
+  }
+  function tween(ms, fn, done) {
+    const t0 = performance.now()
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / ms)
+      fn(ease(t))
+      if (t < 1) requestAnimationFrame(step); else done && done()
+    }
+    requestAnimationFrame(step)
+  }
+  const later = (ms, fn) => timers.push(setTimeout(fn, ms))
+
+  function reset() {
+    timers.forEach(clearTimeout); timers = []
+    state = 'idle'; open = 0; spin = 0; spinSpeed = 0
+    cover.style.opacity = 1; cover.classList.remove('uc-show'); inside.classList.remove('on')
+    $('ucHud').style.opacity = 0; $('ucScan').style.opacity = 0
+    $('ucIrisFill').style.fill = '#2a2321'; $('ucRing').style.opacity = 0
+    ;[...$('ucTomoe').children].forEach((p) => (p.style.opacity = 0))
+    $('ucTomoe').style.opacity = 1; $('ucMange').style.opacity = 0; $('ucPupil').style.opacity = 1
+    $('ucInkC').setAttribute('r', 0); $('ucInk').style.opacity = 1
+    const st = $('ucStatus'); st.className = 'uc-status uc-mono'; st.textContent = '[ Chạm vào mắt để xác thực ]'
+  }
+
+  function authenticate() {
+    state = 'scanning'
+    const st = $('ucStatus')
+    tween(520, (t) => (open = t), () => {
+      $('ucHud').style.opacity = 1
+      $('ucScan').style.opacity = 1
+      tween(1400, (t) => {
+        const y = 144 * (t < .5 ? t * 2 : 2 - t * 2)
+        $('ucScan').style.top = y + 'px'
+        st.innerHTML = `Đang quét mống mắt · <b>${Math.round(t * 100)}%</b>`
+      }, () => {
+        $('ucScan').style.opacity = 0
+        $('ucIrisFill').style.fill = '#a3141a'
+        $('ucRing').style.opacity = 1
+        ;[...$('ucTomoe').children].forEach((p, i) => later(250 + i * 180, () => (p.style.opacity = 1)))
+        later(900, () => {
+          spinSpeed = .5
+          $('ucHud').style.opacity = 0
+          st.className = 'uc-status uc-mono ok'
+          st.innerHTML = '✓ Đã xác thực'
+          cover.classList.add('uc-show')
+          state = 'authed'
+        })
+      })
+    })
+  }
+
+  function enter() {
+    state = 'entering'
+    tween(700, (t) => (spinSpeed = lerp(.5, 14, t)), () => {
+      $('ucTomoe').style.opacity = 0; $('ucRing').style.opacity = 0; $('ucPupil').style.opacity = 0
+      $('ucMange').style.transition = 'opacity .25s'; $('ucMange').style.opacity = 1
+      tween(500, (t) => (spinSpeed = lerp(14, 1.2, t)))
+      later(450, () => {
+        tween(1100, (t) => $('ucInkC').setAttribute('r', lerp(0, 760, t)), () => {
+          cover.style.opacity = 0; inside.classList.add('on')
+          later(150, () => tween(700, (t) => ($('ucInk').style.opacity = 1 - t)))
+          spinSpeed = 0; state = 'inside'
+        })
+      })
+    })
+  }
+
+  phone.addEventListener('click', () => {
+    if (state === 'idle') authenticate()
+    else if (state === 'authed') enter()
+  })
+  $('ucReplay').addEventListener('click', reset)
+  window.ucPal = (p) => {
+    phone.classList.toggle('uc-pal-a', p === 'a'); phone.classList.toggle('uc-pal-b', p === 'b')
+    $('ucPalA').classList.toggle('on', p === 'a'); $('ucPalB').classList.toggle('on', p === 'b')
+  }
+  $('ucPalA').addEventListener('click', () => ucPal('a'))
+  $('ucPalB').addEventListener('click', () => ucPal('b'))
+
+  reset(); loop()
+})()
+</script>

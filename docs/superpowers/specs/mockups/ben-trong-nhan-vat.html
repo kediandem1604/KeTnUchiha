@@ -1,0 +1,307 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  .uc { --ink:#0c0a0a; --ink2:#151111; --ink3:#1d1717; --bone:#ebe3d5; --ash:#857a71; --line:rgba(235,227,213,.1); --red:#a3141a; --red2:#c21d24; }
+  .uc-wrap { display:grid; grid-template-columns: 330px 1fr; gap: 2.2rem; align-items:start; }
+  @media (max-width: 860px){ .uc-wrap{ grid-template-columns:1fr; } }
+  .uc-col { display:flex; flex-direction:column; align-items:center; gap:.7rem; position:sticky; top:1rem; }
+  .uc-hint { font-size:.75rem; color:var(--text-secondary); }
+
+  .uc-phone { width:300px; height:620px; border-radius:30px; background:var(--ink); position:relative; overflow:hidden;
+    border:1px solid #2b2424; box-shadow:0 24px 60px rgba(0,0,0,.35); font-family:'Be Vietnam Pro',system-ui,sans-serif; color:var(--bone); }
+  .uc-scroll { position:absolute; inset:0; overflow-y:auto; scrollbar-width:none; }
+  .uc-scroll::-webkit-scrollbar { display:none; }
+  .uc-grain { position:absolute; inset:0; pointer-events:none; opacity:.07; z-index:30;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .uc-mono { font-family:'JetBrains Mono',ui-monospace,monospace; letter-spacing:.16em; text-transform:uppercase; }
+  .uc-serif { font-family:'Noto Serif Display',Georgia,serif; }
+  .uc-jp { font-family:'Noto Serif JP',serif; }
+
+  .s { position:relative; padding:44px 22px 40px; border-top:1px solid var(--line); overflow:hidden; }
+  .s-head { display:flex; align-items:center; gap:12px; margin-bottom:18px; position:relative; z-index:2; }
+  .s-head svg { flex:none; }
+  .s-head .i { font-size:8.5px; color:var(--ash); }
+  .s-head .c { font-size:10.5px; color:var(--ash); margin-top:3px; }
+  .s-head .c b { color:var(--bone); font-weight:500; }
+  .s-title { font-size:25px; font-weight:500; line-height:1.15; margin:0 0 12px; position:relative; z-index:2; }
+  .s p { font-size:13px; line-height:1.7; color:#d7cfc1; margin:0; position:relative; z-index:2; }
+  .s .name { color:var(--bone); font-weight:600; }
+
+  /* hero */
+  .hero { height:560px; border-top:0; padding:0; }
+  .moon { position:absolute; right:-70px; top:30px; width:230px; height:230px; border-radius:50%; background:radial-gradient(circle at 42% 40%, #9b161c 0%, #7e1015 62%, #5c0b0f 100%); opacity:.92; }
+  .h-meta { position:absolute; top:40px; left:22px; font-size:8.5px; color:var(--ash); }
+  .h-name { position:absolute; top:78px; left:22px; line-height:1.02; }
+  .h-name .a { font-size:28px; font-weight:500; } .h-name .b { font-size:42px; font-weight:700; }
+  .h-name .k { font-size:10px; letter-spacing:.32em; margin-top:10px; color:var(--ash); }
+  .frame { position:absolute; left:22px; top:226px; width:158px; height:206px; border:1px solid rgba(235,227,213,.28); background:repeating-linear-gradient(135deg, rgba(235,227,213,.035) 0 6px, transparent 6px 12px); display:flex; align-items:center; justify-content:center; }
+  .frame .ph { font-size:8.5px; color:var(--ash); }
+  .hanko { position:absolute; right:-14px; bottom:-14px; width:38px; height:38px; background:var(--red); color:#efe6d8; display:flex; align-items:center; justify-content:center; font-size:21px; font-weight:700; transform:rotate(-4deg); }
+  .vert { position:absolute; right:22px; top:300px; writing-mode:vertical-rl; font-size:12px; letter-spacing:.45em; color:var(--ash); }
+  .deg { position:absolute; top:458px; left:22px; right:22px; }
+  .deg .t { font-size:13.5px; font-weight:500; } .deg .x { font-size:10.5px; color:var(--ash); margin-top:4px; }
+
+  /* lời mời */
+  .crows { position:absolute; right:-4px; top:26px; width:150px; height:120px; z-index:1; opacity:.85; }
+  .note { margin-top:18px; padding:14px 14px 12px; border:1px solid var(--line); background:var(--ink2); position:relative; z-index:2; }
+  .note .q { font-style:italic; font-size:13.5px; line-height:1.6; }
+  .note .f { font-size:8.5px; color:var(--ash); margin-top:8px; }
+
+  /* thời gian */
+  .kamui { position:absolute; left:50%; top:178px; width:340px; height:340px; transform:translateX(-50%); z-index:0; opacity:.5; }
+  .when { position:relative; z-index:2; }
+  .when .d { font-size:15px; font-weight:500; }
+  .when .h { font-size:30px; font-weight:500; margin-top:2px; }
+  .cd { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin:22px 0 16px; position:relative; z-index:2; }
+  .cd div { border:1px solid var(--line); background:rgba(12,10,10,.75); padding:10px 0 8px; text-align:center; }
+  .cd b { display:block; font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:600; letter-spacing:0; }
+  .cd span { font-size:8px; color:var(--ash); }
+  .tminus { font-size:9px; color:var(--ash); text-align:center; position:relative; z-index:2; }
+  .tminus b { color:var(--red2); font-weight:600; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 16px; border:1px solid rgba(235,227,213,.3); font-size:12px; letter-spacing:.06em; color:var(--bone); position:relative; z-index:2; background:transparent; cursor:pointer; font-family:inherit; }
+  .btn.red { border-color:var(--red2); background:var(--red); }
+  .row { display:flex; gap:8px; margin-top:16px; position:relative; z-index:2; flex-wrap:wrap; }
+
+  /* địa điểm */
+  .map { margin-top:16px; height:150px; border:1px solid var(--line); position:relative; z-index:2; overflow:hidden;
+    background:
+      linear-gradient(rgba(235,227,213,.06) 1px, transparent 1px) 0 0/22px 22px,
+      linear-gradient(90deg, rgba(235,227,213,.06) 1px, transparent 1px) 0 0/22px 22px, #121010; }
+  .map .road { position:absolute; background:rgba(235,227,213,.16); }
+  .map .pin { position:absolute; left:52%; top:42%; width:12px; height:12px; border-radius:50%; background:var(--red2); box-shadow:0 0 0 6px rgba(194,29,36,.18); }
+  .map .lbl { position:absolute; left:6px; bottom:5px; font-size:7.5px; color:var(--ash); }
+  .coord { font-size:8.5px; color:var(--ash); margin-top:8px; position:relative; z-index:2; }
+  .flicker { position:relative; }
+  .flicker::before, .flicker::after { content:attr(data-t); position:absolute; inset:0; display:flex; align-items:center; justify-content:center; border:1px solid rgba(194,29,36,.5); color:transparent; pointer-events:none; }
+  .flicker::before { transform:translateX(-7px); opacity:.35; } .flicker::after { transform:translateX(-14px); opacity:.15; }
+
+  /* xác nhận */
+  .rsvp-b { position:relative; overflow:visible; }
+  .chidori { position:absolute; left:-6px; top:-8px; width:calc(100% + 12px); height:calc(100% + 16px); pointer-events:none; opacity:0; }
+  .rsvp-b.zap .chidori { animation: zap .55s steps(2) 2; }
+  @keyframes zap { 0%{opacity:1} 50%{opacity:.2} 100%{opacity:0} }
+  .ok { margin-top:14px; font-size:9px; color:var(--ash); position:relative; z-index:2; min-height:12px; }
+
+  /* lời chúc */
+  .rinne { position:absolute; right:-120px; top:-40px; width:300px; height:300px; z-index:0; opacity:.55; }
+  .form { margin-top:16px; border:1px solid var(--line); background:var(--ink2); padding:12px; position:relative; z-index:2; }
+  .form .f { border-bottom:1px solid var(--line); font-size:12px; color:var(--ash); padding:6px 0 8px; margin-bottom:8px; }
+  .reacts { display:flex; gap:6px; margin:16px 0 4px; position:relative; z-index:2; }
+  .reacts span { flex:1; border:1px solid var(--line); padding:7px 0 5px; display:flex; flex-direction:column; align-items:center; gap:3px; font-size:8px; color:var(--ash); }
+  .reacts svg { width:16px; height:16px; }
+  .wish { border-left:2px solid var(--red); background:var(--ink2); padding:11px 12px; margin-top:10px; position:relative; z-index:2; }
+  .wish .w1 { display:flex; justify-content:space-between; align-items:baseline; }
+  .wish .w1 b { font-size:13px; font-weight:600; } .wish .w1 span { font-size:8px; color:var(--ash); }
+  .wish p { font-size:12.5px; margin-top:5px; }
+
+  /* lời kết */
+  .end { text-align:center; padding-bottom:70px; }
+  .end p { text-align:center; }
+  .sig { font-style:italic; font-size:28px; margin-top:18px; }
+  .end .m { font-size:8px; color:var(--ash); margin-top:26px; }
+
+  .music { position:absolute; left:14px; bottom:14px; width:38px; height:38px; border-radius:50%; background:rgba(12,10,10,.85); border:1px solid rgba(235,227,213,.2); z-index:25; display:flex; align-items:center; justify-content:center; }
+  .music svg { animation: spin 5s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg) } }
+
+  /* cột phải */
+  .uc-map { width:100%; border-collapse:collapse; font-size:.85rem; margin-bottom:1.4rem; }
+  .uc-map td { padding:.55rem .4rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.45; }
+  .uc-map td:first-child { width:44px; }
+  .uc-map td:nth-child(2) { white-space:nowrap; font-weight:600; }
+  .uc-map small { color:var(--text-secondary); }
+  .uc-note { font-size:.85rem; color:var(--text-secondary); line-height:1.55; }
+  .dossier { margin-top:.6rem; display:flex; gap:12px; align-items:center; background:#0c0a0a; color:#ebe3d5; padding:12px 14px; border:1px solid #2b2424; font-family:'Be Vietnam Pro',sans-serif; max-width:360px; }
+  .dossier .t { font-size:.95rem; font-weight:600; } .dossier .s2 { font-size:.72rem; color:#857a71; margin-top:2px; } .dossier .q { font-size:.75rem; font-style:italic; margin-top:6px; color:#d7cfc1; }
+</style>
+
+<h2>Bên trong thiệp: mỗi phần một nhân vật</h2>
+<p class="subtitle">Cuộn trong điện thoại để xem cả thiệp. Bấm nút "Mình sẽ đến" để xem tia Chidori. Các con mắt đều vẽ bằng vector nên sắc nét trên mọi màn hình.</p>
+
+<div class="uc uc-wrap">
+  <div class="uc-col">
+    <div class="uc-phone">
+      <div class="uc-scroll">
+
+        <!-- HERO -->
+        <section class="s hero">
+          <div class="moon"></div>
+          <div class="h-meta uc-mono">// Lễ tốt nghiệp · 26.11.2026</div>
+          <div class="h-name uc-serif"><div class="a">Nguyễn</div><div class="b">Tiến Quốc</div><div class="k uc-jp">グエン・ティエン・クオック</div></div>
+          <div class="frame"><span class="ph uc-mono">Ảnh chân dung</span><div class="hanko uc-jp">卒</div></div>
+          <div class="vert uc-jp">卒業 二〇二六</div>
+          <div class="deg"><div class="t">Cử nhân Công nghệ Thông tin</div><div class="x">Trường ĐH Khoa học Tự nhiên – ĐHQG TP.HCM</div></div>
+        </section>
+
+        <!-- LỜI MỜI · ITACHI -->
+        <section class="s">
+          <svg class="crows" viewBox="0 0 150 120" id="crows"></svg>
+          <div class="s-head"><svg width="40" height="40" viewBox="-40 -40 80 80" data-eye="itachi"></svg>
+            <div><div class="i uc-mono">01 · Lời mời</div><div class="c"><b>Itachi</b> · <span class="uc-jp">イタチ</span></div></div></div>
+          <h3 class="s-title uc-serif">Thân mời<br><span style="color:var(--red2)">Minh Anh</span></h3>
+          <p>đến chung vui cùng Quốc trong ngày lễ tốt nghiệp. Khép lại bốn năm với những dòng code, những deadline và những đêm trắng, mở ra một chặng đường mới. Có mặt của bạn là món quà ý nghĩa nhất với Quốc.</p>
+          <div class="note"><div class="q uc-serif">"Cảm ơn mày đã cùng tao qua môn Cấu trúc dữ liệu. Nhất định phải tới nha!"</div><div class="f uc-mono">— Lời nhắn riêng cho Minh Anh</div></div>
+        </section>
+
+        <!-- THỜI GIAN · OBITO -->
+        <section class="s">
+          <svg class="kamui" viewBox="-170 -170 340 340" id="kamui"></svg>
+          <div class="s-head"><svg width="40" height="40" viewBox="-40 -40 80 80" data-eye="obito"></svg>
+            <div><div class="i uc-mono">02 · Thời gian</div><div class="c"><b>Obito</b> · <span class="uc-jp">オビト</span> · Kamui</div></div></div>
+          <div class="when"><div class="d">Thứ Năm, 26 tháng 11, 2026</div><div class="h uc-serif">10:00 sáng</div></div>
+          <div class="cd"><div><b>15</b><span class="uc-mono">Ngày</span></div><div><b>04</b><span class="uc-mono">Giờ</span></div><div><b>12</b><span class="uc-mono">Phút</span></div><div><b id="sec">33</b><span class="uc-mono">Giây</span></div></div>
+          <div class="tminus uc-mono">Kamui đang hút thời gian<br><b style="text-transform:none;letter-spacing:.08em">T−15d 04:12:33</b></div>
+          <div class="row"><button class="btn" type="button">＋ Thêm vào lịch</button></div>
+        </section>
+
+        <!-- ĐỊA ĐIỂM · SHISUI -->
+        <section class="s">
+          <div class="s-head"><svg width="40" height="40" viewBox="-40 -40 80 80" data-eye="shisui"></svg>
+            <div><div class="i uc-mono">03 · Địa điểm</div><div class="c"><b>Shisui</b> · <span class="uc-jp">シスイ</span> · Thuấn Thân</div></div></div>
+          <h3 class="s-title uc-serif" style="font-size:20px">Trường ĐH Khoa học Tự nhiên</h3>
+          <p>227 Nguyễn Văn Cừ, Chợ Quán, TP. Hồ Chí Minh</p>
+          <div class="map"><div class="road" style="left:0;right:0;top:58%;height:5px"></div><div class="road" style="top:0;bottom:0;left:38%;width:4px"></div><div class="road" style="left:0;right:0;top:20%;height:2px;transform:rotate(-8deg)"></div><div class="pin"></div><div class="lbl uc-mono">Bản đồ Google, chuyển tông tối</div></div>
+          <div class="coord uc-mono">10.7626° N · 106.6822° E</div>
+          <div class="row"><button class="btn red flicker" data-t="Thuấn Thân tới đây →" type="button">Thuấn Thân tới đây →</button></div>
+        </section>
+
+        <!-- XÁC NHẬN · SASUKE -->
+        <section class="s">
+          <div class="s-head"><svg width="40" height="40" viewBox="-40 -40 80 80" data-eye="sasuke"></svg>
+            <div><div class="i uc-mono">04 · Xác nhận tham dự</div><div class="c"><b>Sasuke</b> · <span class="uc-jp">サスケ</span> · Chidori</div></div></div>
+          <h3 class="s-title uc-serif">Bạn sẽ đến chứ?</h3>
+          <div class="row">
+            <button class="btn red rsvp-b" id="go" type="button">Mình sẽ đến
+              <svg class="chidori" viewBox="0 0 140 56" preserveAspectRatio="none"><polyline fill="none" stroke="#e6eef8" stroke-width="1.6" points="0,30 14,22 22,34 36,18 46,32 58,14 70,36 82,20 94,30 106,12 118,34 130,22 140,28"/><polyline fill="none" stroke="#e6eef8" stroke-width=".9" opacity=".7" points="0,40 18,46 30,36 44,48 60,38 76,50 92,40 110,48 126,38 140,44"/></svg>
+            </button>
+            <button class="btn" type="button">Tiếc quá, mình bận</button>
+          </div>
+          <div class="ok uc-mono" id="ok"></div>
+        </section>
+
+        <!-- LỜI CHÚC · MADARA -->
+        <section class="s">
+          <svg class="rinne" viewBox="-150 -150 300 300" id="rinne"></svg>
+          <div class="s-head"><svg width="40" height="40" viewBox="-40 -40 80 80" data-eye="madara"></svg>
+            <div><div class="i uc-mono">05 · Sổ lời chúc</div><div class="c"><b>Madara</b> · <span class="uc-jp">マダラ</span> · Nguyệt Độc</div></div></div>
+          <h3 class="s-title uc-serif">Mỗi lời chúc<br>là một giấc mơ</h3>
+          <div class="form"><div class="f">Minh Anh</div><div class="f" style="border:0;margin:0">Viết lời chúc cho Quốc…</div></div>
+          <div class="reacts" id="reacts"></div>
+          <div class="wish"><div class="w1"><b>Hoàng Long</b><span class="uc-mono">06-11 15:17</span></div><p>Chúc mừng tân cử nhân! Ra trường code ít bug, lương nhiều số 0 nha 🎓</p></div>
+          <div class="wish"><div class="w1"><b>Cô Hạnh</b><span class="uc-mono">06-11 09:02</span></div><p>Chúc em vững bước trên con đường mới, luôn giữ lửa đam mê.</p></div>
+        </section>
+
+        <!-- LỜI KẾT -->
+        <section class="s end">
+          <svg width="46" height="60" viewBox="-12 -14 24 30" style="margin:0 auto 16px;display:block"><path d="M -11 -1 A 11 11 0 1 1 11 -1 Q 0 2.5 -11 -1 Z" fill="#a3141a"/><path d="M 11 -1 A 11 11 0 0 1 -11 -1 Q 0 2.5 11 -1 Z" fill="#ebe3d5"/><rect x="-1.7" y="8" width="3.4" height="7" rx="1" fill="#ebe3d5"/></svg>
+          <p>Một hành trình khép lại, một chặng đường mới mở ra. Cảm ơn gia đình, thầy cô và bạn bè đã đồng hành cùng Quốc suốt những năm đại học.</p>
+          <div class="sig uc-serif">Quốc</div>
+          <div class="m uc-mono">git commit -m "đã tốt nghiệp" ✓</div>
+        </section>
+      </div>
+      <div class="music" title="Nút nhạc: Sharingan nhỏ xoay khi nhạc phát"><svg width="24" height="24" viewBox="-40 -40 80 80" data-eye="tomoe"></svg></div>
+      <div class="uc-grain"></div>
+    </div>
+    <div class="uc-hint">Góc dưới trái: nút nhạc là một Sharingan nhỏ, xoay khi đang phát</div>
+  </div>
+
+  <div>
+    <h3 style="margin-bottom:.6rem">Ai giữ phần nào</h3>
+    <table class="uc-map">
+      <tr><td><svg width="34" height="34" viewBox="-40 -40 80 80" data-eye="itachi"></svg></td><td>Itachi</td><td>Lời mời<br><small>Bầy quạ bay ra từ góc phần mời. Itachi gắn với gia đình, hợp với lời mời người thân.</small></td></tr>
+      <tr><td><svg width="34" height="34" viewBox="-40 -40 80 80" data-eye="obito"></svg></td><td>Obito</td><td>Thời gian, đếm ngược<br><small>Vòng xoáy Kamui xoay chậm sau đồng hồ, như đang hút thời gian về ngày lễ.</small></td></tr>
+      <tr><td><svg width="34" height="34" viewBox="-40 -40 80 80" data-eye="shisui"></svg></td><td>Shisui</td><td>Địa điểm<br><small>Nút "Thuấn Thân tới đây" có bóng mờ dịch chuyển, bấm là mở chỉ đường. Bản đồ chuyển tông tối cho hợp nền.</small></td></tr>
+      <tr><td><svg width="34" height="34" viewBox="-40 -40 80 80" data-eye="sasuke"></svg></td><td>Sasuke</td><td>Xác nhận tham dự<br><small>Bấm "Mình sẽ đến" thì tia Chidori chạy qua nút.</small></td></tr>
+      <tr><td><svg width="34" height="34" viewBox="-40 -40 80 80" data-eye="madara"></svg></td><td>Madara</td><td>Sổ lời chúc<br><small>Mặt trăng Nguyệt Độc mờ phía sau. Nút cảm xúc vẽ nét đơn thay cho emoji màu: Thương, Katon, Sharingan, Vỗ tay, Tốt nghiệp.</small></td></tr>
+    </table>
+
+    <h3 style="margin-bottom:.4rem">Có thêm phần "Gia tộc Uchiha" không?</h3>
+    <p class="uc-note" style="margin-bottom:.8rem">Ngoài việc mỗi nhân vật giữ một phần như bên trái, có thể thêm một phần riêng (đặt sau lời mời) gồm 5 thẻ hồ sơ, mỗi thẻ là con mắt, tên, thuật nổi tiếng và một câu ngắn do mình viết. Ví dụ một thẻ:</p>
+    <div class="dossier">
+      <svg width="46" height="46" viewBox="-40 -40 80 80" data-eye="itachi"></svg>
+      <div><div class="t">Uchiha Itachi <span class="uc-jp" style="font-size:.75rem;color:#857a71">イタチ</span></div><div class="s2 uc-mono" style="font-size:.6rem">Tsukuyomi · Amaterasu · Susanoo</div><div class="q">Người anh lặng lẽ gánh hết mọi thứ cho gia đình.</div></div>
+    </div>
+    <div class="options" style="margin-top:1rem">
+      <div class="option" data-choice="khong-them" onclick="toggleSelect(this)">
+        <div class="letter">A</div>
+        <div class="content"><h3>Giữ như bản phác</h3><p>Nhân vật nằm rải trong các phần. Thiệp gọn, khách cuộn nhanh tới phần chính.</p></div>
+      </div>
+      <div class="option" data-choice="them-gia-toc" onclick="toggleSelect(this)">
+        <div class="letter">B</div>
+        <div class="content"><h3>Thêm phần "Gia tộc Uchiha"</h3><p>Thêm 5 thẻ hồ sơ. Fan Naruto sẽ thích, nhưng thiệp dài thêm một đoạn.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const NS = 'http://www.w3.org/2000/svg'
+  const K = '#0a0505'
+  const rot = (n, step, fn) => Array.from({ length: n }, (_, i) => fn(i * step)).join('')
+  const PAT = {
+    tomoe: `<circle r="22.5" fill="none" stroke="${K}" stroke-width="1.4"/>` + rot(3, 120, (a) => `<path fill="${K}" transform="rotate(${a}) translate(0 -22.5) rotate(-75)" d="M 5.2 0 A 5.2 5.2 0 1 1 -5.2 0 C -5.2 -6 -1.5 -11 6.5 -13 C 2.8 -9.5 5.2 -5 5.2 0 Z"/>`) + `<circle r="8.5" fill="${K}"/>`,
+    itachi: `<circle r="12" fill="${K}"/>` + rot(3, 120, (a) => `<path fill="${K}" transform="rotate(${a})" d="M -6 -6 C -4 -22 8 -33 26 -29 C 12 -26 6 -16 7 -5 Z"/>`),
+    sasuke: rot(3, 60, (a) => `<path fill="${K}" transform="rotate(${a})" d="M -36 0 Q 0 -13 36 0 Q 0 13 -36 0 Z"/>`) + `<circle r="10" fill="#a3141a"/><circle r="10" fill="none" stroke="${K}" stroke-width="1.4"/><circle r="4.6" fill="${K}"/>`,
+    madara: `<circle r="21" fill="none" stroke="${K}" stroke-width="3.2"/>` + rot(3, 120, (a) => `<path fill="${K}" transform="rotate(${a})" d="M 0 -6 C 9 -14 11 -27 3 -36 C 4 -28 -2 -20 -9 -14 Z"/>`) + `<circle r="8.5" fill="${K}"/>`,
+    obito: `<circle r="10" fill="none" stroke="${K}" stroke-width="3.4"/>` + rot(3, 120, (a) => `<path fill="${K}" transform="rotate(${a})" d="M 2 -10 C 14 -14 24 -24 24 -36 C 18 -27 10 -22 -6 -19 Z"/>`) + `<circle r="4" fill="${K}"/>`,
+    shisui: rot(4, 90, (a) => `<path fill="${K}" transform="rotate(${a})" d="M -4 -7 C 1 -20 13 -30 31 -28 C 18 -23 11 -13 8 -3 Z"/>`) + `<circle r="9" fill="${K}"/><circle r="5.5" fill="#a3141a"/><circle r="2.6" fill="${K}"/>`,
+  }
+  document.querySelectorAll('svg[data-eye]').forEach((s) => {
+    s.innerHTML = `<circle r="38" fill="#a3141a"/><circle r="38" fill="none" stroke="#120708" stroke-width="2.4"/>${PAT[s.dataset.eye]}`
+  })
+
+  // Quạ
+  const crow = 'M -10 0 Q -5 -7 0 -1 Q 5 -7 10 0 Q 5 -3.5 0 2 Q -5 -3.5 -10 0 Z'
+  const cg = document.getElementById('crows')
+  ;[[30, 30, .9, -8], [70, 18, 1.2, 6], [110, 40, .8, -4], [92, 72, 1.05, 10], [128, 88, .7, -12], [52, 60, .65, 4]].forEach(([x, y, s, r]) => {
+    cg.insertAdjacentHTML('beforeend', `<path d="${crow}" fill="#ebe3d5" transform="translate(${x} ${y}) rotate(${r}) scale(${s})" opacity=".8"/>`)
+  })
+
+  // Kamui: xoáy ốc
+  const k = document.getElementById('kamui')
+  for (let arm = 0; arm < 3; arm++) {
+    let d = ''
+    for (let t = 0; t <= 1; t += .01) {
+      const a = t * Math.PI * 4 + arm * (Math.PI * 2 / 3), r = 8 + t * 158
+      d += (t === 0 ? 'M' : 'L') + (Math.cos(a) * r).toFixed(1) + ' ' + (Math.sin(a) * r).toFixed(1) + ' '
+    }
+    k.insertAdjacentHTML('beforeend', `<path d="${d}" fill="none" stroke="#857a71" stroke-width="${1.2 - arm * .25}" opacity="${.55 - arm * .12}"/>`)
+  }
+  let ka = 0
+  ;(function spinK() { ka -= .15; k.style.transform = `translateX(-50%) rotate(${ka}deg)`; requestAnimationFrame(spinK) })()
+
+  // Rinne Sharingan (mặt trăng Nguyệt Độc)
+  const rn = document.getElementById('rinne')
+  rn.insertAdjacentHTML('beforeend', `<circle r="148" fill="#7e1015"/>`)
+  ;[28, 62, 96, 130].forEach((r) => rn.insertAdjacentHTML('beforeend', `<circle r="${r}" fill="none" stroke="#2a0507" stroke-width="2.4"/>`))
+  rn.insertAdjacentHTML('beforeend', `<circle r="12" fill="#2a0507"/>`)
+  ;[28, 62, 96].forEach((r, ri) => {
+    for (let i = 0; i < 3; i++) rn.insertAdjacentHTML('beforeend', `<path fill="#2a0507" transform="rotate(${i * 120 + ri * 40}) translate(0 -${r}) rotate(-75) scale(1.6)" d="M 5.2 0 A 5.2 5.2 0 1 1 -5.2 0 C -5.2 -6 -1.5 -11 6.5 -13 C 2.8 -9.5 5.2 -5 5.2 0 Z"/>`)
+  })
+
+  // Nút cảm xúc nét đơn
+  const R = document.getElementById('reacts')
+  const ic = {
+    'Thương': '<path d="M12 20s-7-4.4-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.6 12 20 12 20z"/>',
+    'Katon': '<path d="M12 21c-3.9 0-6-2.6-6-5.6 0-3.4 3-5.2 3.4-8.9 2.3 1.4 3.4 3.4 3.3 5.4 1-.6 1.7-1.8 1.8-3 2 1.6 3.5 3.9 3.5 6.5 0 3-2.1 5.6-6 5.6z"/>',
+    'Sharingan': '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="6.8" r="1" fill="currentColor"/><circle cx="16.5" cy="14.6" r="1" fill="currentColor"/><circle cx="7.5" cy="14.6" r="1" fill="currentColor"/>',
+    'Vỗ tay': '<path d="M8 13l4-6 1.6 1.1L12 11l4.2-4.6 1.4 1.2-3 4.1 3.3-2.6 1.1 1.4-5 5.5c-2 2.2-5 2.4-7 .6s-1.9-4.6 0-6.6z"/>',
+    'Tốt nghiệp': '<path d="M2 9l10-4 10 4-10 4-10-4z"/><path d="M6 11v4c3 2 9 2 12 0v-4"/>',
+  }
+  Object.entries(ic).forEach(([n, p]) => R.insertAdjacentHTML('beforeend', `<span><svg viewBox="0 0 24 24" fill="none" stroke="#ebe3d5" stroke-width="1.4" stroke-linejoin="round">${p}</svg><b style="font-weight:600;color:#ebe3d5;font-size:10px">${12 + n.length}</b>${n}</span>`))
+
+  // Đồng hồ giây
+  let sec = 33
+  setInterval(() => { sec = (sec + 59) % 60; document.getElementById('sec').textContent = String(sec).padStart(2, '0') }, 1000)
+
+  // Chidori
+  const go = document.getElementById('go')
+  go.addEventListener('click', () => {
+    go.classList.remove('zap'); void go.offsetWidth; go.classList.add('zap')
+    document.getElementById('ok').textContent = '✓ Đã ghi nhận · Hẹn gặp Minh Anh nhé'
+  })
+})()
+</script>
