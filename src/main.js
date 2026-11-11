@@ -18,7 +18,6 @@ import { displayName, pageTitle } from './lib/text.js'
 import { withTimeout } from './lib/async.js'
 import { initReveal } from './fx/reveal.js'
 import { createMusic } from './sections/music.js'
-import { createConfetti } from './fx/confetti.js'
 import { renderCover } from './sections/cover.js'
 import { renderHero } from './sections/hero.js'
 import { renderInvite } from './sections/invite.js'
@@ -114,7 +113,7 @@ async function boot() {
     emitTap: () => tapCallbacks.splice(0).forEach(safe),
   }
 
-  ctx.fx.burst = createConfetti().burst
+  ctx.fx.burst = () => {} // tạm thời: rsvp.js cũ còn gọi, Task 7 bỏ
   ctx.fx.floatEmoji = floatEmoji
   const music = createMusic(content.music, { reducedMotion })
   ctx.music = music

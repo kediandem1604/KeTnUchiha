@@ -1,144 +1,151 @@
 import { gsap } from 'gsap'
-import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { h } from '../lib/dom.js'
-import { capSvg, planeSvg } from '../lib/icons.js'
-import { eventRange, formatDateDots } from '../lib/time.js'
+import { crestSvg } from '../art/crest.js'
+import { createEye } from '../art/eye.js'
+import { createInk } from '../fx/ink.js'
+import { COVER, coverNext, nameSizeClass } from '../lib/cover-state.js'
 import { displayName } from '../lib/text.js'
+import { eventRange } from '../lib/time.js'
 
-gsap.registerPlugin(MotionPathPlugin)
-if (import.meta.env.DEV) window.__gsap = gsap // chỉ để kiểm tra khi dev
+const RED = '#a3141a'
+const wait = (s) => new Promise((r) => setTimeout(r, s * 1000))
+const play = (tween) => new Promise((resolve) => tween.eventCallback('onComplete', resolve))
 
-// Dải mây lớn che màn hình khi chuyển cảnh (bên trái; bên phải lật ngang).
-const BANK = `<svg viewBox="0 0 600 1000" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
-  <defs><linearGradient id="bank" x1="0" x2="1"><stop offset=".55" stop-color="#fff"/><stop offset="1" stop-color="#eef7ff"/></linearGradient></defs>
-  <g fill="url(#bank)"><rect width="430" height="1000"/>
-  <circle cx="430" cy="40" r="110"/><circle cx="470" cy="190" r="120"/><circle cx="430" cy="350" r="105"/>
-  <circle cx="480" cy="500" r="125"/><circle cx="440" cy="660" r="110"/><circle cx="475" cy="820" r="120"/><circle cx="430" cy="970" r="105"/></g></svg>`
+/** "Công nghệ Thông tin" → "CNTT"; ngành một chữ thì giữ nguyên. */
+function shortMajor(major) {
+  const words = String(major || '').trim().split(/\s+/).filter(Boolean)
+  return words.length > 1 ? words.map((w) => w[0]).join('').toUpperCase() : words[0] || ''
+}
 
-/** Màn hình bìa: máy bay giấy thả phong bì, bấm "Mở thiệp" để vào trang. */
+/** Màn hình bìa: chạm vào mắt để "quét mống mắt", Sharingan thức tỉnh, rồi mở thư mời. */
 export function renderCover(host, ctx) {
   const { content, reducedMotion } = ctx
-  const range = eventRange(content.event)
+  const { graduate } = content
+  const year = eventRange(content.event).start.getUTCFullYear()
 
-  const seal = h('button', { class: 'envelope__seal', attrs: { type: 'button', 'aria-label': 'Mở thiệp' }, html: capSvg(30, '#13304f', '#fff6dc') })
-  const flap = h('div', { class: 'envelope__flap' })
-  const letter = h('div', { class: 'envelope__letter' },
-    h('span', { class: 'letter__eyebrow script', text: 'Thư mời' }),
-    h('span', { class: 'letter__title', text: 'Lễ Tốt Nghiệp' }),
-    h('span', { class: 'letter__cap', html: capSvg(30, '#2378c2') }),
-  )
-  // Link riêng: để trống tên cho tới khi tải xong (tránh nháy "Bạn thân mến").
-  const FALLBACK = 'Bạn thân mến'
-  const guestName = h('span', { class: 'envelope__guest script', text: ctx.route.slug ? ' ' : FALLBACK })
-  ctx.guestReady.then((guest) => {
-    guestName.textContent = guest ? displayName(guest) : FALLBACK
-    guestName.classList.add('is-in')
-  })
-  const envelope = h('div', { class: 'envelope' },
-    h('div', { class: 'envelope__back' }),
-    letter,
-    h('div', { class: 'envelope__front' },
-      h('span', { class: 'envelope__to', text: 'Thân gửi' }),
-      guestName,
+  const eye = createEye()
+  const eyeBtn = h('button', { class: 'cover__eye', attrs: { type: 'button', 'aria-label': 'Chạm để mở thư mời' } }, eye.el)
+  const scan = h('span', { class: 'cover__scan' })
+  const hud = h('div', { class: 'cover__hud', attrs: { 'aria-hidden': 'true' } }, h('i'), h('i'), h('i'), h('i'), scan)
+  const status = h('p', { class: 'cover__status mono', attrs: { 'aria-live': 'polite' }, text: '[ Chạm vào mắt để xác thực ]' })
+  const nameEl = h('p', { class: 'cover__name serif' })
+  const greet = h('div', { class: 'cover__greet' }, h('p', { class: 'cover__to serif', text: 'Thân gửi' }), nameEl)
+  const openBtn = h('button', { class: 'cover__open', attrs: { type: 'button', tabindex: '-1' }, text: 'Mở thư mời' })
+  const degree = [graduate.degree, shortMajor(graduate.major)].filter(Boolean).join(' ')
+  const cover = h('div', { class: 'cover', attrs: { role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Thư mời tốt nghiệp' } },
+    h('div', { class: 'cover__top' },
+      h('span', { html: crestSvg({ size: 22 }) }),
+      h('p', { class: 'mono', text: `Thư mời tốt nghiệp · ${year}` }),
     ),
-    flap,
-    seal,
+    h('div', { class: 'cover__eyewrap' }, hud, eyeBtn),
+    status,
+    greet,
+    openBtn,
+    h('p', { class: 'cover__foot mono', text: [graduate.fullName, degree].filter(Boolean).join(' · ') }),
   )
-  const openBtn = h('button', { class: 'btn btn--primary cover__open', attrs: { type: 'button' } },
-    h('span', { text: 'Mở thiệp' }),
-    h('span', { class: 'cover__open-icon', attrs: { 'aria-hidden': 'true' }, text: '✉' }),
-  )
-  const head = [
-    h('p', { class: 'cover__eyebrow script', text: 'Thư mời tốt nghiệp' }),
-    h('h1', { class: 'cover__name', text: content.graduate.fullName }),
-    h('p', { class: 'cover__date', text: formatDateDots(range.start).replace(/\./g, ' · ') }),
-  ]
-  const { music } = content
-  const hint = music?.src || music?.youtube || music?.spotify ? h('p', { class: 'cover__hint', text: '🎵 Thiệp có nhạc nền, nhớ bật âm thanh nhé' }) : null
-  const stage = h('div', { class: 'cover__stage' }, ...head, envelope, openBtn, hint)
-  const plane = h('div', { class: 'cover__plane', html: planeSvg(70) })
-  const left = h('div', { class: 'cover__bank cover__bank--left', html: BANK })
-  const right = h('div', { class: 'cover__bank cover__bank--right', html: BANK })
-  const cover = h('div', { class: 'cover', attrs: { role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Thiệp mời tốt nghiệp' } }, stage, plane, left, right)
 
   host.append(cover)
   document.documentElement.classList.add('is-locked')
 
-  // ── Cảnh mở đầu ──────────────────────────────────────────
-  let idle
-  if (reducedMotion) {
-    plane.remove()
-  } else {
-    const W = window.innerWidth
-    const H = window.innerHeight
-    gsap.set([...head, openBtn, hint].filter(Boolean), { autoAlpha: 0, y: 16 })
-    gsap.set(envelope, { autoAlpha: 0, y: -H * 0.32, scale: 0.35, rotation: -18 })
-    const intro = gsap.timeline({ delay: 0.15 })
-    intro
-      .to(plane, {
-        duration: 1.9,
-        ease: 'power1.inOut',
-        motionPath: {
-          path: [
-            { x: -90, y: H * 0.78 },
-            { x: W * 0.28, y: H * 0.42 },
-            { x: W * 0.52, y: H * 0.2 },
-            { x: W * 0.82, y: H * 0.16 },
-            { x: W + 120, y: -60 },
-          ],
-          curviness: 1.4,
-          autoRotate: 17,
-        },
-      })
-      .to(envelope, { duration: 1, autoAlpha: 1, y: 0, scale: 1, rotation: 0, ease: 'back.out(1.5)' }, 0.75)
-      .to(head, { duration: 0.7, autoAlpha: 1, y: 0, stagger: 0.1, ease: 'power2.out' }, 1.15)
-      .to([openBtn, hint].filter(Boolean), { duration: 0.6, autoAlpha: 1, y: 0, stagger: 0.12, ease: 'power2.out' }, 1.55)
-      .add(() => {
-        plane.remove()
-        idle = gsap.to(envelope, { y: -7, duration: 2.2, ease: 'sine.inOut', yoyo: true, repeat: -1 })
-      })
+  let state = COVER.IDLE
+  const go = (event) => {
+    const next = coverNext(state, event)
+    if (next === state) return false
+    state = next
+    return true
   }
 
-  // ── Mở thiệp ─────────────────────────────────────────────
-  let opened = false
-  function open() {
-    if (opened) return
-    opened = true
-    openBtn.disabled = true
-    idle?.kill()
-    ctx.emitTap() // phát nhạc ngay trong cú chạm (iPhone chặn nếu gọi muộn hơn)
+  // Tomoe xoay theo tốc độ (độ/giây); dừng hẳn khi bìa bị gỡ.
+  const view = { spin: 0, speed: 0 }
+  const spinTick = (_t, deltaMs) => {
+    if (!view.speed) return
+    view.spin = (view.spin + (view.speed * deltaMs) / 1000) % 360
+    eye.set({ spin: view.spin })
+  }
+  gsap.ticker.add(spinTick)
 
-    const finish = () => {
-      document.documentElement.classList.remove('is-locked')
-      window.scrollTo(0, 0)
-      ctx.emitOpen()
+  async function showGreeting() {
+    const name = displayName(await ctx.guestReady)
+    nameEl.textContent = name
+    nameEl.className = `cover__name serif ${nameSizeClass(name)}`.trim()
+    status.classList.add('is-ok')
+    status.textContent = '✓ Đã xác thực'
+    cover.classList.add('is-authed')
+    openBtn.removeAttribute('tabindex')
+    go('scanDone')
+  }
+
+  async function scanSequence() {
+    if (reducedMotion) {
+      eye.set({ open: 1, iris: RED, ring: 1, tomoe: 3 })
+      return showGreeting()
     }
+    const lids = { open: 0 }
+    await play(gsap.to(lids, { open: 1, duration: 0.5, ease: 'power2.out', onUpdate: () => eye.set({ open: lids.open }) }))
 
+    cover.classList.add('is-scanning')
+    const progress = { p: 0 }
+    const travel = hud.clientHeight
+    await Promise.all([
+      play(gsap.fromTo(scan, { y: 0 }, { y: travel, duration: 0.7, ease: 'sine.inOut', yoyo: true, repeat: 1 })),
+      play(gsap.to(progress, {
+        p: 100,
+        duration: 1.4,
+        ease: 'none',
+        onUpdate: () => (status.innerHTML = `Đang quét mống mắt · <b>${Math.round(progress.p)}%</b>`),
+      })),
+    ])
+    cover.classList.remove('is-scanning')
+
+    eye.set({ iris: RED, ring: 1 })
+    for (let i = 1; i <= 3; i++) {
+      await wait(i === 1 ? 0.25 : 0.18)
+      eye.set({ tomoe: i })
+    }
+    await wait(0.35)
+    view.speed = 30
+    await showGreeting()
+  }
+
+  function finish() {
+    gsap.ticker.remove(spinTick)
+    document.documentElement.classList.remove('is-locked')
+    window.scrollTo(0, 0)
+    ctx.emitOpen()
+  }
+
+  async function enterSequence() {
+    openBtn.disabled = true
+    eyeBtn.disabled = true
     if (reducedMotion) {
       gsap.to(cover, { autoAlpha: 0, duration: 0.4, onComplete: () => cover.remove() })
       finish()
+      go('enterDone')
       return
     }
+    await play(gsap.to(view, { speed: 840, duration: 0.7, ease: 'power2.in' }))
+    eye.set({ mangekyo: 1 })
+    gsap.to(view, { speed: 72, duration: 0.5, ease: 'power2.out' })
+    await wait(0.45)
 
-    gsap.timeline()
-      .to(seal, { scale: 1.35, autoAlpha: 0, duration: 0.3, ease: 'power2.in' })
-      .to(flap, { rotationX: 180, duration: 0.5, ease: 'power2.inOut' }, 0.15)
-      .set(flap, { zIndex: 1 }, 0.4)
-      .to(letter, { yPercent: -58, duration: 0.55, ease: 'power3.out' }, 0.5)
-      .to([openBtn, hint, ...head].filter(Boolean), { autoAlpha: 0, y: -10, duration: 0.3, stagger: 0.03 }, 0.45)
-      .to(left, { xPercent: 100, duration: 0.55, ease: 'power3.in' }, 0.85)
-      .to(right, { xPercent: -100, duration: 0.55, ease: 'power3.in' }, 0.85)
-      .add(() => {
-        stage.remove()
-        finish()
-        ctx.fx.burst({ x: window.innerWidth / 2, y: window.innerHeight * 0.62, count: 130 })
-      }, 1.42)
-      .to(left, { xPercent: -10, scale: 1.1, duration: 0.95, ease: 'power2.inOut' }, 1.5)
-      .to(right, { xPercent: 10, scale: 1.1, duration: 0.95, ease: 'power2.inOut' }, 1.5)
-      .to(cover, { autoAlpha: 0, duration: 0.45 }, 2.0)
-      .add(() => cover.remove())
+    const r = eyeBtn.getBoundingClientRect()
+    const ink = createInk()
+    await ink.spread({ x: r.left + r.width / 2, y: r.top + r.height / 2, duration: 1.1 })
+    cover.remove()
+    finish()
+    await ink.fadeOut(0.7)
+    go('enterDone')
   }
 
-  openBtn.addEventListener('click', open)
-  seal.addEventListener('click', open)
+  function onTap() {
+    if (state === COVER.IDLE && go('tap')) {
+      scanSequence()
+    } else if (state === COVER.AUTHED && go('tap')) {
+      ctx.emitTap() // phát nhạc ngay trong cú chạm (iPhone chặn nếu gọi muộn hơn)
+      enterSequence()
+    }
+  }
+
+  eyeBtn.addEventListener('click', onTap)
+  openBtn.addEventListener('click', onTap)
 }
