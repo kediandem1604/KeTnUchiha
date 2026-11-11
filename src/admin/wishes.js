@@ -2,23 +2,54 @@ import { h, toast } from '../lib/dom.js'
 import { icons } from '../lib/icons.js'
 import { formatWishTime } from '../lib/time.js'
 
+/** "3 lời chúc" hoặc "3 lời chúc · 1 đang ẩn". */
+function countText(wishes) {
+  const hidden = wishes.filter((w) => w.hidden).length
+  return `${wishes.length} lời chúc${hidden ? ` · ${hidden} đang ẩn` : ''}`
+}
+
 export function renderWishesTab(root, state) {
+  /** Nút Ẩn/Hiện: ẩn thì khách không thấy lời chúc trên thiệp, vẫn hiện lại được. */
+  function hideButton(w) {
+    const btn = h('button', {
+      class: 'btn btn--ghost btn--small admin-wish__toggle',
+      attrs: { type: 'button', 'aria-pressed': String(Boolean(w.hidden)), title: w.hidden ? 'Hiện lại trên thiệp' : 'Ẩn khỏi thiệp' },
+      html: `${w.hidden ? icons.eye : icons.eyeOff}<span>${w.hidden ? 'Hiện' : 'Ẩn'}</span>`,
+      on: {
+        async click() {
+          btn.disabled = true
+          try {
+            await state.api.setWishHidden(w.id, !w.hidden)
+            toast(w.hidden ? 'Đã hiện lại lời chúc trên thiệp' : 'Đã ẩn lời chúc khỏi thiệp', 'success')
+            await state.reload()
+          } catch (err) {
+            toast(err.message, 'error')
+            btn.disabled = false
+          }
+        },
+      },
+    })
+    return btn
+  }
+
   function paint() {
     const { wishes, guests } = state.data
     const bySlug = new Map(guests.map((g) => [g.slug, g]))
     root.replaceChildren(
       h('section', { class: 'card' },
-        h('div', { class: 'list-head' }, h('h2', { class: 'card-title', text: 'Lời chúc' }), h('span', { class: 'muted', text: `${wishes.length} lời chúc` })),
+        h('div', { class: 'list-head' }, h('h2', { class: 'card-title', text: 'Lời chúc' }), h('span', { class: 'muted', text: countText(wishes) })),
         wishes.length
           ? h('div', { class: 'admin-wishes' },
               wishes.map((w) =>
-                h('article', { class: 'admin-wish' },
+                h('article', { class: `admin-wish${w.hidden ? ' is-hidden' : ''}` },
                   h('div', { class: 'admin-wish__head' },
                     h('span', { class: 'admin-wish__emoji', text: w.emoji }),
                     h('div', { class: 'admin-wish__who' },
                       h('b', { text: w.name }),
                       h('small', { class: 'muted', text: [formatWishTime(w.at), w.slug && bySlug.get(w.slug) ? `từ link /${w.slug}` : ''].filter(Boolean).join(' · ') }),
+                      w.hidden ? h('span', { class: 'badge badge--hidden', text: 'Đang ẩn' }) : null,
                     ),
+                    hideButton(w),
                     h('button', {
                       class: 'btn btn--ghost btn--small btn--danger',
                       attrs: { type: 'button', title: 'Xoá lời chúc', 'aria-label': 'Xoá lời chúc' },

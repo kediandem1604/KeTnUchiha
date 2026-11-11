@@ -22,7 +22,8 @@ export function fullCounts(counts = {}) {
   return Object.fromEntries(REACTION_KEYS.map((k) => [k, counts[k] || 0]))
 }
 
-const publicWish = ({ slug, ...wish }) => wish
+/** Lời chúc gửi ra trang thiệp: bỏ slug (ai gửi) và cờ ẩn. */
+const publicWish = ({ slug, hidden, ...wish }) => wish
 
 function findGuest(data, slug) {
   const g = data.guests.find((x) => x.slug === slug)
@@ -81,7 +82,8 @@ export function publicRoutes({ store, now, randomId }) {
 
     ['GET', /^\/wishes$/, async () => {
       const [wishes, reactions] = await Promise.all([load(store, 'wishes'), load(store, 'reactions')])
-      return json(200, { wishes: wishes.wishes.map(publicWish), reactions: fullCounts(reactions.counts) })
+      // Lời chúc bị ẩn ở trang quản lí thì không gửi ra trang thiệp.
+      return json(200, { wishes: wishes.wishes.filter((w) => !w.hidden).map(publicWish), reactions: fullCounts(reactions.counts) })
     }],
 
     ['POST', /^\/wishes$/, async (req) => {

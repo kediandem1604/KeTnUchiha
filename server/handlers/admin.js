@@ -114,6 +114,20 @@ export function adminRoutes({ store, adminPassword, now }) {
       return noContent()
     })],
 
+    // Ẩn/hiện lời chúc: ẩn thì trang thiệp không hiện, trang quản lí vẫn thấy để hiện lại được.
+    ['PATCH', /^\/admin\/wishes\/([A-Za-z0-9_-]+)$/, guarded(async (req, [id]) => {
+      const body = await readJson(req, LIMITS.maxBody)
+      if (typeof body.hidden !== 'boolean') throw new HttpError(400, 'Thiếu trạng thái ẩn/hiện')
+      await update(store, 'wishes', (data) => {
+        const w = data.wishes.find((x) => x.id === id)
+        if (!w) throw new HttpError(404, 'Không tìm thấy lời chúc')
+        if (body.hidden) w.hidden = true
+        else delete w.hidden
+        return data
+      }, EMPTY.wishes)
+      return json(200, { id, hidden: body.hidden })
+    })],
+
     // Cài đặt thiệp (tab "Cài đặt"): lưu đủ các ô, kiểm tra trước khi ghi.
     ['PUT', /^\/admin\/config$/, guarded(async (req) => {
       const body = await readJson(req, LIMITS.maxBody)

@@ -571,3 +571,31 @@ body {
 .btn--ghost {
   color: var(--ink);
 }
+
+/* Lời chúc đang ẩn khỏi thiệp: mờ đi, có nhãn "Đang ẩn" */
+.admin-wish.is-hidden .admin-wish__msg,
+.admin-wish.is-hidden .admin-wish__emoji,
+.admin-wish.is-hidden .admin-wish__who b {
+  opacity: 0.5;
+}
+
+.badge--hidden {
+  display: inline-block;
+  justify-self: start;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  background: rgba(235, 227, 213, 0.12);
+}
+
+.admin-wish__toggle {
+  margin-left: auto;
+  gap: 6px;
+}
+
+.admin-wish__toggle + .btn--danger {
+  margin-left: 0;
+}

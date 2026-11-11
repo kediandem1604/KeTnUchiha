@@ -85,3 +85,27 @@ test('overview trả đủ dữ liệu, lời chúc có slug', async () => {
   expect(o.body.wishes[0].slug).toBe('vy')
   expect(o.body.reactions.tim).toBe(0)
 })
+
+test('ẩn/hiện lời chúc: ẩn thì trang thiệp không thấy, quản lí vẫn thấy; hiện lại thì thấy', async () => {
+  const w = (await call(r, 'POST', '/api/wishes', { name: 'Bé Syn', message: 'Tada~', emoji: '🎓' })).body
+  const hide = await call(r, 'PATCH', `/api/admin/wishes/${w.id}`, { hidden: true }, auth)
+  expect(hide.status).toBe(200)
+  expect(hide.body).toEqual({ id: w.id, hidden: true })
+  expect((await call(r, 'GET', '/api/wishes')).body.wishes).toEqual([])
+  const o = await call(r, 'GET', '/api/admin/overview', null, auth)
+  expect(o.body.wishes[0]).toMatchObject({ id: w.id, name: 'Bé Syn', hidden: true })
+
+  expect((await call(r, 'PATCH', `/api/admin/wishes/${w.id}`, { hidden: false }, auth)).body).toEqual({ id: w.id, hidden: false })
+  const list = (await call(r, 'GET', '/api/wishes')).body.wishes
+  expect(list).toHaveLength(1)
+  expect(list[0]).not.toHaveProperty('hidden')
+})
+
+test('ẩn/hiện lời chúc: cần mật khẩu, dữ liệu phải đúng kiểu, lời chúc phải tồn tại', async () => {
+  const w = (await call(r, 'POST', '/api/wishes', { name: 'A', message: 'hi', emoji: '🎓' })).body
+  expect((await call(r, 'PATCH', `/api/admin/wishes/${w.id}`, { hidden: true })).status).toBe(401)
+  expect((await call(r, 'PATCH', `/api/admin/wishes/${w.id}`, { hidden: 'yes' }, auth)).status).toBe(400)
+  expect((await call(r, 'PATCH', `/api/admin/wishes/${w.id}`, {}, auth)).status).toBe(400)
+  expect((await call(r, 'PATCH', '/api/admin/wishes/khongco', { hidden: true }, auth)).status).toBe(404)
+  expect((await call(r, 'GET', '/api/wishes')).body.wishes).toHaveLength(1)
+})
