@@ -1,0 +1,72 @@
+/* ── 01 · Lời mời (Itachi) ───────────────────────────── */
+.invite__crows {
+  position: absolute !important;
+  z-index: 0 !important;
+  right: -4px;
+  top: 24px;
+  width: 150px;
+  height: 120px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.invite__crows svg {
+  width: 100%;
+  height: 100%;
+}
+
+.invite__crows .crow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: crow-glide 6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -0.9s);
+  animation-play-state: paused;
+}
+
+.section--invite.is-visible .crow {
+  animation-play-state: running;
+}
+
+@keyframes crow-glide {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  35% {
+    transform: translate(-4px, -5px);
+  }
+  70% {
+    transform: translate(3px, 1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invite__crows .crow {
+    animation: none;
+  }
+}
+
+.invite__guest {
+  color: var(--red-bright);
+}
+
+.invite__note {
+  margin: 20px 0 0;
+  padding: 15px 15px 13px;
+  border: 1px solid var(--line);
+  background: var(--ink-2);
+}
+
+.invite__note blockquote {
+  margin: 0;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--bone);
+  white-space: pre-line;
+}
+
+.invite__note figcaption {
+  margin-top: 8px;
+  font-size: 10px;
+}

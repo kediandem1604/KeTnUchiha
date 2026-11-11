@@ -3,7 +3,8 @@ import './styles/tokens.css'
 import './styles/base.css'
 import './styles/cover.css'
 import './styles/hero.css'
-import './styles/info.css'
+import './styles/invite.css'
+import './styles/closing.css'
 import './styles/schedule.css'
 import './styles/venue.css'
 import './styles/wishes.css'
@@ -29,6 +30,7 @@ import { renderWishes } from './sections/wishes.js'
 import { renderContact } from './sections/contact.js'
 import { floatEmoji } from './fx/floaters.js'
 import { renderClosing } from './sections/closing.js'
+import { printEasterEgg } from './fx/easter-egg.js'
 
 // Thứ tự các phần trên trang.
 const SECTIONS = [
@@ -80,6 +82,7 @@ async function boot() {
   const guestReady = withTimeout(loadGuest(route.slug), GUEST_TIMEOUT_MS).catch(() => null)
   const content = mergeSettings(baseContent, await loadSettings(api.getConfig))
   document.title = pageTitle(content)
+  printEasterEgg(content)
 
   const safe = (cb) => {
     try {

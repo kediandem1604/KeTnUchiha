@@ -1,0 +1,30 @@
+/* ── Lời kết ─────────────────────────────────────────── */
+.section--closing {
+  padding-bottom: 96px;
+}
+
+.closing {
+  text-align: center;
+}
+
+.closing__crest {
+  display: inline-block;
+  margin-bottom: 18px;
+}
+
+.closing__text {
+  text-align: center;
+}
+
+.closing__sign {
+  margin: 20px 0 0;
+  font-style: italic;
+  font-size: 30px;
+  color: var(--bone);
+}
+
+.closing__git {
+  margin: 28px 0 0;
+  text-transform: none;
+  letter-spacing: 0.06em;
+}
