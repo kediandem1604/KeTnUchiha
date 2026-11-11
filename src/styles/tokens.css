@@ -8,6 +8,10 @@
   --red: #a3141a;
   --red-bright: #c21d24;
   --line: rgba(235, 227, 213, 0.1);
+  --line-strong: rgba(235, 227, 213, 0.3);
+  --line-hover: rgba(235, 227, 213, 0.55);
+  --glass: rgba(12, 10, 10, 0.78);
+  --paper: #ece5d7;
 
   --font-display: 'Noto Serif Display', Georgia, serif;
   --font-body: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -18,4 +22,19 @@
 
   --content-w: 520px;
   --gutter: 22px;
+}
+
+/* Phần trong thiệp: tông "Mực trên giấy" — giấy ngà, chữ mực, dấu đỏ. Bìa (ngoài .page) vẫn tối. */
+.page {
+  --ink: #ece5d7;
+  --ink-2: #e4dbcc;
+  --bone: #161212;
+  --bone-soft: #3d3531;
+  --ash: #655b52;
+  --red-bright: #a3141a;
+  --line: rgba(22, 18, 18, 0.14);
+  --line-strong: rgba(22, 18, 18, 0.32);
+  --line-hover: rgba(22, 18, 18, 0.55);
+  --glass: rgba(236, 229, 215, 0.82);
+  color: var(--bone);
 }

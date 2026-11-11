@@ -84,7 +84,7 @@
   min-height: 64px;
   padding: 9px 0 7px;
   border: 1px solid var(--line);
-  background: rgba(12, 10, 10, 0.7);
+  background: var(--glass);
   color: var(--bone);
   touch-action: manipulation;
   user-select: none;

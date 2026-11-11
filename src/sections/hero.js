@@ -6,7 +6,7 @@ import { eventRange, formatDateDots } from '../lib/time.js'
 /** Khung chờ khi chưa có ảnh hoặc ảnh tải lỗi: gia huy mờ + chữ "Ảnh chân dung". */
 function placeholder() {
   return h('div', { class: 'hero__placeholder' },
-    h('span', { class: 'hero__placeholder-crest', html: crestSvg({ size: 48 }) }),
+    h('span', { class: 'hero__placeholder-crest', html: crestSvg({ size: 48, outline: true }) }),
     h('span', { class: 'mono', text: 'Ảnh chân dung' }),
   )
 }

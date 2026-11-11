@@ -6,7 +6,7 @@ export function renderClosing(root, ctx) {
 
   root.append(
     h('div', { class: 'closing', attrs: { 'data-reveal': '' } },
-      h('span', { class: 'closing__crest', html: crestSvg({ size: 46 }) }),
+      h('span', { class: 'closing__crest', html: crestSvg({ size: 46, outline: true }) }),
       texts.closing ? h('p', { class: 'prose closing__text', text: texts.closing }) : null,
       h('p', { class: 'closing__sign serif', text: graduate.shortName }),
       h('p', { class: 'closing__git mono', text: 'git commit -m "đã tốt nghiệp" ✓' }),

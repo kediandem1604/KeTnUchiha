@@ -2,7 +2,8 @@ import { h, rand } from '../lib/dom.js'
 import { reactionIconSvg } from '../art/reaction-icons.js'
 
 const MAX_ACTIVE = 40
-const COLORS = ['#c21d24', '#ebe3d5']
+/** Màu icon bay: đỏ và mực, đều thấy rõ trên nền giấy. */
+export const FLOAT_COLORS = ['#a3141a', '#161212']
 let layer
 let active = 0
 
@@ -24,7 +25,7 @@ export function floatIcon(key, { x = window.innerWidth / 2, y = window.innerHeig
       style: {
         left: `${x}px`,
         top: `${y}px`,
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        color: FLOAT_COLORS[Math.floor(Math.random() * FLOAT_COLORS.length)],
         '--dx': `${rand(-60, 60).toFixed(0)}px`,
         '--rot': `${rand(-25, 25).toFixed(0)}deg`,
         '--rise': `${rand(45, 75).toFixed(0)}vh`,

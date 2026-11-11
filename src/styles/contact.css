@@ -14,14 +14,14 @@
   gap: 14px;
   min-height: 56px;
   padding: 10px 14px;
-  border: 1px solid rgba(235, 227, 213, 0.22);
+  border: 1px solid var(--line-strong);
   color: var(--bone);
   text-decoration: none;
   transition: border-color 0.2s;
 }
 
 .contact__item:hover {
-  border-color: rgba(235, 227, 213, 0.5);
+  border-color: var(--line-hover);
 }
 
 .contact__icon {

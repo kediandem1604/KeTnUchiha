@@ -12,9 +12,9 @@
   height: 220px;
   border: 1px solid var(--line);
   background:
-    linear-gradient(rgba(235, 227, 213, 0.06) 1px, transparent 1px) 0 0 / 22px 22px,
-    linear-gradient(90deg, rgba(235, 227, 213, 0.06) 1px, transparent 1px) 0 0 / 22px 22px,
-    #121010;
+    linear-gradient(rgba(22, 18, 18, 0.06) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(90deg, rgba(22, 18, 18, 0.06) 1px, transparent 1px) 0 0 / 22px 22px,
+    var(--ink-2);
   overflow: hidden;
 }
 
@@ -26,8 +26,8 @@
   border: 0;
   opacity: 0;
   transition: opacity 0.5s ease;
-  /* Bản đồ chuyển tông tối cho hợp nền */
-  filter: invert(0.92) hue-rotate(180deg) saturate(0.6) contrast(0.9);
+  /* Bản đồ dịu màu cho hợp nền giấy */
+  filter: grayscale(0.35) sepia(0.12) contrast(0.95);
 }
 
 .venue__map.is-loaded iframe {

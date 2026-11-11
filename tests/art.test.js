@@ -41,3 +41,11 @@ test('icon cảm xúc', () => {
 
 import { REACTION_KEYS } from '../shared/constants.js'
 test('mỗi cảm xúc có icon', () => expect(Object.keys(REACTION_ICONS)).toEqual(REACTION_KEYS))
+
+test('gia huy có viền mực khi đặt trên nền giấy', () => {
+  expect(crestSvg({ size: 40 })).not.toContain('stroke=')
+  expect(crestSvg({ size: 40, outline: true })).toContain('stroke="#161212"')
+})
+
+import { FLOAT_COLORS } from '../src/fx/float-icons.js'
+test('icon bay dùng màu thấy được trên nền giấy', () => expect(FLOAT_COLORS).toEqual(['#a3141a', '#161212']))
