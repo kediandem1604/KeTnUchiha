@@ -143,12 +143,12 @@
 .wall__error p {
   margin: 0;
   padding: 18px 0;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--ash);
 }
 
 .wall__error .btn {
-  min-height: 40px;
+  min-height: 44px;
 }
 
 .wish {
@@ -190,7 +190,7 @@
 
 .wish__msg {
   margin: 5px 0 0;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
   color: var(--bone-soft);
   white-space: pre-line;

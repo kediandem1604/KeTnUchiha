@@ -52,7 +52,7 @@ textarea.field {
   border-radius: 18px;
   font-weight: 700;
   font-size: 16px;
-  color: var(--sky-700);
+  color: var(--red-text);
   background: var(--white);
   border: 1.5px solid var(--sky-200);
   transition: transform 0.25s var(--ease-out), background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
@@ -94,7 +94,7 @@ textarea.field {
   margin: 0;
   min-height: 1.6em;
   font-weight: 600;
-  color: var(--sky-700);
+  color: var(--red-text);
 }
 
 .rsvp__thanks:empty {

@@ -50,7 +50,7 @@ button {
 }
 
 a {
-  color: var(--sky-600);
+  color: var(--red-text);
 }
 
 :focus-visible {

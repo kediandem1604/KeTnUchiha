@@ -27,7 +27,7 @@
   font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--sky-600);
+  color: var(--red-text);
 }
 
 .section-title {
@@ -104,7 +104,7 @@
 }
 
 .btn--ghost {
-  color: var(--sky-700);
+  color: var(--red-text);
   background: var(--white);
   border: 1px solid var(--line);
   box-shadow: var(--shadow-sm);

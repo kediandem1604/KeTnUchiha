@@ -164,7 +164,9 @@
 }
 
 .hero__cue {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   margin-top: 28px;
   padding: 10px 0;
   text-decoration: none;
