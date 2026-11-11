@@ -33,7 +33,3 @@ export const icons = {
 /** Mũ tốt nghiệp (tô màu) */
 export const capSvg = (size = 28, color = '#13304F', tassel = '#F2C46D') =>
   `<svg viewBox="0 0 64 48" width="${size}" height="${(size * 48) / 64}" aria-hidden="true"><path d="M32 4 2 17l30 13 30-13z" fill="${color}"/><path d="M14 23v11c0 4 8 8 18 8s18-4 18-8V23l-18 8z" fill="${color}" opacity=".88"/><path d="M58 18.5V33" stroke="${tassel}" stroke-width="2.4" stroke-linecap="round"/><circle cx="58" cy="35" r="3.2" fill="${tassel}"/><circle cx="32" cy="17" r="2.6" fill="${tassel}"/></svg>`
-
-/** Máy bay giấy */
-export const planeSvg = (size = 64) =>
-  `<svg viewBox="0 0 96 64" width="${size}" height="${(size * 64) / 96}" aria-hidden="true"><path d="M2 30 94 2 58 60 44 40z" fill="#fff"/><path d="M94 2 44 40l-4 20 14-14" fill="#d6ebfb"/><path d="M94 2 44 40 2 30z" fill="#fff" stroke="#bfe3ff" stroke-width="1.2" stroke-linejoin="round"/><path d="M94 2 58 60 44 40z" fill="#eef7ff" stroke="#bfe3ff" stroke-width="1.2" stroke-linejoin="round"/></svg>`

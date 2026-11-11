@@ -1,0 +1,49 @@
+/* ── Liên hệ (không có nhân vật) ─────────────────────── */
+.contact__lead {
+  margin-bottom: 16px;
+}
+
+.contact {
+  display: grid;
+  gap: 8px;
+}
+
+.contact__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  padding: 10px 14px;
+  border: 1px solid rgba(235, 227, 213, 0.22);
+  color: var(--bone);
+  text-decoration: none;
+  transition: border-color 0.2s;
+}
+
+.contact__item:hover {
+  border-color: rgba(235, 227, 213, 0.5);
+}
+
+.contact__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  color: var(--red-bright);
+}
+
+.contact__text {
+  display: grid;
+}
+
+.contact__text b {
+  font-weight: 500;
+}
+
+.contact__text small {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ash);
+  overflow-wrap: anywhere;
+}

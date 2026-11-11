@@ -1,4 +1,4 @@
-import { h, sectionHead } from '../lib/dom.js'
+import { h } from '../lib/dom.js'
 import { icons } from '../lib/icons.js'
 import { facebookLink } from '../../shared/facebook.js'
 
@@ -19,7 +19,8 @@ export function renderContact(root, ctx) {
   }
 
   root.append(
-    sectionHead('Liên hệ', `Cần gì cứ nhắn ${graduate.shortName} nha`),
+    h('h2', { class: 'section-title', attrs: { 'data-reveal': '' }, text: 'Liên hệ' }),
+    h('p', { class: 'prose contact__lead', attrs: { 'data-reveal': '' }, text: `Cần gì cứ nhắn ${graduate.shortName} nha` }),
     h('div', { class: 'contact', attrs: { 'data-reveal': '' } },
       items.map((it, i) =>
         h('a', {

@@ -76,14 +76,3 @@ export function watchVisible(el) {
   }).observe(el)
   document.addEventListener('visibilitychange', update)
 }
-
-/** Tiêu đề section: dòng nhỏ + tiêu đề lớn + họa tiết mây. */
-export function sectionHead(eyebrow, title) {
-  return h('header', { class: 'section-head', attrs: { 'data-reveal': '' } },
-    h('p', { class: 'eyebrow', text: eyebrow }),
-    h('h2', { class: 'section-title', text: title }),
-    h('div', { class: 'divider', attrs: { 'aria-hidden': 'true' }, html: DIVIDER }),
-  )
-}
-
-const DIVIDER = `<span></span><svg viewBox="0 0 48 24" width="40" height="20"><path d="M12 20h26a8 8 0 0 0 0-16 11 11 0 0 0-21-1 7 7 0 0 0-5 17z" fill="#fff" stroke="#93cffb" stroke-width="1.6"/></svg><span></span>`

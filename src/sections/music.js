@@ -1,15 +1,10 @@
 import { h, toast } from '../lib/dom.js'
 import { spotifyInfo } from '../lib/spotify.js'
 import { youtubeInfo } from '../lib/youtube.js'
+import { eyeBadgeSvg } from '../art/mangekyo.js'
 
-const DISC = `<svg viewBox="0 0 48 48" width="34" height="34" aria-hidden="true">
-  <circle cx="24" cy="24" r="23" fill="#13304f"/>
-  <circle cx="24" cy="24" r="18" fill="none" stroke="#2a4a6e" stroke-width="1"/>
-  <circle cx="24" cy="24" r="14" fill="none" stroke="#2a4a6e" stroke-width="1"/>
-  <path d="M10 18a16 16 0 0 1 9-9" stroke="#5c7fa6" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <circle cx="24" cy="24" r="8.5" fill="#5fb6f2"/>
-  <circle cx="24" cy="24" r="2.2" fill="#fff"/>
-</svg>`
+// Nút nhạc là một Sharingan nhỏ: xoay khi đang phát.
+const DISC = eyeBadgeSvg('sharingan', 26)
 
 const NOOP = { start() {}, toggle() {}, el: null, slot: null, attach() {} }
 
@@ -27,13 +22,12 @@ export function pauseWhenHidden(audio, doc = document) {
   })
 }
 
-/** Nút tròn nổi góc dưới trái (đĩa than quay khi đang phát). */
+/** Nút tròn nổi góc dưới trái (Sharingan xoay khi đang phát). */
 function musicButton(label) {
   const btn = h(
     'button',
     { class: 'music is-off', attrs: { type: 'button', 'aria-label': `Bật ${label}`, 'aria-pressed': 'false' } },
     h('span', { class: 'music__disc', html: DISC }),
-    h('span', { class: 'music__bars', attrs: { 'aria-hidden': 'true' } }, h('i'), h('i'), h('i')),
   )
   document.body.append(btn)
   const setState = (playing) => {
@@ -116,7 +110,7 @@ function createYouTubeMusic(info, music) {
   const slot = h('div', { class: 'yt-slot' }, h('div'))
   const close = h('button', { class: 'yt-dock__close', attrs: { type: 'button', 'aria-label': 'Ẩn trình phát' }, text: '×' })
   const dock = h('div', { class: 'yt-dock' },
-    h('p', { class: 'yt-dock__hint', text: 'Bấm ▶ để nghe nhạc nhé 🎵' }),
+    h('p', { class: 'yt-dock__hint', text: 'Bấm ▶ để nghe nhạc nhé' }),
     close,
     slot,
   )
@@ -270,7 +264,7 @@ function createSpotifyMusic(info, music) {
     hintTimer = setTimeout(() => {
       if (playing) return
       slot.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      toast('Bấm ▶ trên trình phát Spotify để nghe nhạc nhé 🎵')
+      toast('Bấm ▶ trên trình phát Spotify để nghe nhạc nhé')
     }, 2500)
   }
 

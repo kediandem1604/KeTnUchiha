@@ -1,4 +1,4 @@
-import { h, sectionHead } from '../lib/dom.js'
+import { h } from '../lib/dom.js'
 import { icons } from '../lib/icons.js'
 
 function openLightbox(photos, start, name) {
@@ -45,12 +45,11 @@ export function renderGallery(root, ctx) {
   }
   const name = ctx.content.graduate.shortName
   root.append(
-    sectionHead('Khoảnh khắc', 'Thanh xuân rực rỡ'),
+    h('h2', { class: 'section-title', attrs: { 'data-reveal': '' }, text: 'Khoảnh khắc' }),
     h('div', { class: 'gallery', attrs: { 'data-reveal': '' } },
       photos.map((src, i) =>
         h('button', {
-          class: 'polaroid',
-          style: { '--i': i, '--tilt': `${i % 2 ? 3 : -3}deg` },
+          class: 'gallery__item',
           attrs: { type: 'button', 'aria-label': `Xem ảnh ${i + 1}` },
           on: { click: () => openLightbox(photos, i, name) },
         }, h('img', { src, alt: '', attrs: { loading: 'lazy', decoding: 'async' } })),
