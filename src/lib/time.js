@@ -140,3 +140,15 @@ export function buildIcs({ title, details, location, start, end, uid }) {
   ]
   return lines.map(fold).join('\r\n') + '\r\n'
 }
+
+/** Dòng đếm ngược kiểu code: "T−15d 04:12:33" (dấu trừ U+2212). Số âm coi như 0. */
+export function formatTMinus({ days, hours, minutes, seconds }) {
+  const n = (v) => Math.max(0, Math.floor(v) || 0)
+  return `T−${n(days)}d ${pad(n(hours))}:${pad(n(minutes))}:${pad(n(seconds))}`
+}
+
+/** "Thứ Năm, 26 tháng 11, 2026" theo giờ Việt Nam. */
+export function longDateWords(date) {
+  const v = vn(date)
+  return `${weekdayVi(date)}, ${v.getUTCDate()} tháng ${v.getUTCMonth() + 1}, ${v.getUTCFullYear()}`
+}

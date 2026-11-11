@@ -61,3 +61,16 @@ test('link Google Calendar và .ics', () => {
   expect(ics).toContain('DESCRIPTION:a\\, b\r\n')
   expect(ics.startsWith('BEGIN:VCALENDAR\r\n')).toBe(true)
 })
+
+import { formatTMinus, longDateWords } from '../src/lib/time.js'
+
+test('dòng T− kiểu code', () => {
+  expect(formatTMinus({ days: 15, hours: 4, minutes: 12, seconds: 33 })).toBe('T−15d 04:12:33')
+  expect(formatTMinus({ days: 0, hours: 0, minutes: 0, seconds: 0 })).toBe('T−0d 00:00:00')
+  expect(formatTMinus({ days: -1, hours: -2, minutes: 0, seconds: -5 })).toBe('T−0d 00:00:00')
+})
+
+test('ngày viết bằng chữ theo giờ Việt Nam', () => {
+  expect(longDateWords(eventRange({ date: '2026-11-26', start: '10:00', end: '12:00' }).start)).toBe('Thứ Năm, 26 tháng 11, 2026')
+  expect(longDateWords(eventRange({ date: '2026-12-01', start: '06:30', end: '08:00' }).start)).toBe('Thứ Ba, 1 tháng 12, 2026')
+})
