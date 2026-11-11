@@ -10,7 +10,8 @@ export function renderInvite(root, ctx) {
   const name = capitalize(ctx.displayName)
   const note = ctx.guest?.note
 
-  root.append(
+  // append() gốc biến null thành chữ "null" nên phải lọc bỏ phần trống.
+  const parts = [
     h('div', { class: 'invite__crows', attrs: { 'aria-hidden': 'true' }, html: crowsSvg() }),
     characterHead({ n: 1, label: 'Lời mời', character: 'itachi' }),
     h('h2', { class: 'section-title', attrs: { 'data-reveal': '' } },
@@ -25,6 +26,7 @@ export function renderInvite(root, ctx) {
           h('figcaption', { class: 'mono', text: `— Lời nhắn riêng cho ${name}` }),
         )
       : null,
-  )
+  ]
+  root.append(...parts.filter(Boolean))
   watchVisible(root)
 }

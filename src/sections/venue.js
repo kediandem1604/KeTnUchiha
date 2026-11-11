@@ -24,7 +24,8 @@ export function renderVenue(root, ctx) {
         h('span', { class: 'venue__map-loading mono', text: 'Đang tải bản đồ…' }))
     : null
 
-  root.append(
+  // append() gốc biến null thành chữ "null" nên phải lọc bỏ phần trống.
+  const parts = [
     venue.name ? h('h2', { class: 'section-title venue__name', attrs: { 'data-reveal': '' }, text: venue.name }) : null,
     venue.address ? h('p', { class: 'prose venue__addr', attrs: { 'data-reveal': '' }, text: venue.address }) : null,
     map,
@@ -38,7 +39,8 @@ export function renderVenue(root, ctx) {
         text: label,
       }),
     ),
-  )
+  ]
+  root.append(...parts.filter(Boolean))
 
   // Chỉ gắn bản đồ khi khách cuộn gần tới để trang tải nhanh.
   if (map) {

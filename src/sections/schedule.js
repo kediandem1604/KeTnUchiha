@@ -86,7 +86,8 @@ export function renderSchedule(root, ctx) {
     h('div', { class: 'schedule__cal' }, gcal, ics),
   )
 
-  root.append(
+  // append() gốc biến null thành chữ "null" nên phải lọc bỏ phần trống.
+  const parts = [
     h('div', { class: 'schedule__kamui', attrs: { 'aria-hidden': 'true' }, html: kamuiSvg() }),
     characterHead({ n: 2, label: 'Thời gian', character: 'obito' }),
     h('div', { class: 'schedule__when', attrs: { 'data-reveal': '' } },
@@ -98,7 +99,8 @@ export function renderSchedule(root, ctx) {
     phaseMsg,
     event.note ? h('p', { class: 'prose schedule__note', attrs: { 'data-reveal': '' }, text: event.note }) : null,
     addCal,
-  )
+  ]
+  root.append(...parts.filter(Boolean))
   io?.observe(tiles)
   if (!io) timer = setInterval(tick, 1000)
   watchVisible(root)
