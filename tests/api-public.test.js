@@ -64,7 +64,7 @@ test('gửi lời chúc: giữ HTML dạng chữ, giữ xuống dòng, bỏ ký 
   expect(res.body).toMatchObject({ id: 'id1', name: 'Minh Trí', message: '<b>Chúc</b> mừng\nnha', emoji: '🎉', at: T0 })
   const list = await call(r, 'GET', '/api/wishes')
   expect(list.body.wishes[0]).not.toHaveProperty('slug')
-  expect(list.body.reactions).toEqual({ tim: 0, phao: 0, votay: 0, xucdong: 0, mu: 0, hoa: 0 })
+  expect(list.body.reactions).toEqual({ tim: 0, katon: 0, sharingan: 0, votay: 0, mu: 0 })
 })
 
 test('lời chúc không hợp lệ', async () => {
@@ -102,4 +102,12 @@ test('body quá 20KB → 413; JSON hỏng → 400; route lạ → 404; tiền t�
   expect((await call(r, 'POST', '/api/wishes', '{hỏng')).status).toBe(400)
   expect((await call(r, 'GET', '/api/khong-co')).status).toBe(404)
   expect((await call(r, 'GET', '/.netlify/functions/api/wishes')).status).toBe(200)
+})
+
+test('cảm xúc mới được nhận, khoá cũ bị từ chối', async () => {
+  const ok = await call(r, 'POST', '/api/reactions', { counts: { katon: 3, sharingan: 2 } })
+  expect(ok.status).toBe(200)
+  expect(ok.body.counts).toMatchObject({ katon: 3, sharingan: 2 })
+  expect((await call(r, 'POST', '/api/reactions', { counts: { phao: 1 } })).status).toBe(400)
+  expect((await call(r, 'POST', '/api/reactions', { counts: { hoa: 1 } })).status).toBe(400)
 })

@@ -1,7 +1,10 @@
-import { h, sectionHead, toast, whenNear, rand } from '../lib/dom.js'
+import { h, toast, whenNear, rand } from '../lib/dom.js'
 import { icons } from '../lib/icons.js'
 import { formatWishTime } from '../lib/time.js'
-import { LIMITS, REACTIONS, WISH_EMOJIS } from '../../shared/constants.js'
+import { LIMITS, REACTIONS } from '../../shared/constants.js'
+import { reactionIconSvg } from '../art/reaction-icons.js'
+import { tsukuyomiMoonSvg } from '../art/motifs.js'
+import { characterHead } from './section-head.js'
 import { createHoldTap } from '../lib/hold-tap.js'
 import { nextFlushDelay } from '../lib/reactions.js'
 
@@ -30,7 +33,6 @@ const store = {
 
 function wishCard(w, isNew = false) {
   return h('article', { class: `wish${isNew ? ' wish--new' : ''}`, dataset: { id: w.id } },
-    h('span', { class: 'wish__emoji', attrs: { 'aria-hidden': 'true' }, text: w.emoji }),
     h('div', { class: 'wish__body' },
       h('header', { class: 'wish__head' },
         h('b', { class: 'wish__name', text: w.name }),
@@ -78,26 +80,11 @@ export function renderWishes(root, ctx) {
   })
   const honeypot = h('input', { class: 'wish-form__trap', type: 'text', name: 'website', tabIndex: -1, attrs: { autocomplete: 'off', 'aria-hidden': 'true' } })
 
-  let chosen = WISH_EMOJIS[0]
-  const emojiBtns = WISH_EMOJIS.map((e) =>
-    h('button', {
-      class: 'emoji-pick',
-      text: e,
-      attrs: { type: 'button', 'aria-pressed': String(e === chosen), 'aria-label': `Chọn cảm xúc ${e}` },
-      on: {
-        click() {
-          chosen = e
-          emojiBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.textContent === e)))
-        },
-      },
-    }),
-  )
-
   let lastTip = -1
   const tipBtn = h('button', {
-    class: 'btn btn--ghost wish-form__tip',
+    class: 'btn wish-form__tip',
     attrs: { type: 'button', 'aria-label': 'Gợi ý lời chúc', title: 'Gợi ý lời chúc' },
-    html: icons.bulb,
+    html: `${icons.bulb}<span>Gợi ý</span>`,
     on: {
       click() {
         if (!suggestions.length) return
@@ -111,13 +98,11 @@ export function renderWishes(root, ctx) {
       },
     },
   })
-  const sendBtn = h('button', { class: 'btn btn--primary wish-form__send', attrs: { type: 'submit' }, html: `${icons.send}<span>Gửi lời chúc</span>` })
+  const sendBtn = h('button', { class: 'btn btn--red wish-form__send', attrs: { type: 'submit' }, html: `${icons.send}<span>Gửi lời chúc</span>` })
 
-  const form = h('form', { class: 'card wish-form', attrs: { 'data-reveal': '', novalidate: true } },
+  const form = h('form', { class: 'wish-form', attrs: { 'data-reveal': '', novalidate: true } },
     nameInput,
     h('div', { class: 'wish-form__msg' }, message, counter),
-    h('div', { class: 'wish-form__emojis', attrs: { role: 'group', 'aria-label': 'Cảm xúc đi kèm' } },
-      h('span', { class: 'wish-form__label', text: 'Cảm xúc' }), ...emojiBtns),
     h('div', { class: 'wish-form__actions' }, tipBtn, sendBtn),
     honeypot,
   )
@@ -132,7 +117,7 @@ export function renderWishes(root, ctx) {
     const n = ids.size
     countLabel.textContent = n ? `${n} lời chúc gửi đến ${short}` : ''
     if (!n && !list.querySelector('.wall__empty, .wall__error')) {
-      list.append(h('p', { class: 'wall__empty', text: 'Hãy là người đầu tiên gửi lời chúc 💙' }))
+      list.append(h('p', { class: 'wall__empty', text: 'Hãy là người đầu tiên gửi lời chúc' }))
     }
     if (n) list.querySelector('.wall__empty')?.remove()
   }
@@ -206,7 +191,7 @@ export function renderWishes(root, ctx) {
     paintReactions()
     const btn = reactBtns[r.key]
     const { x, y } = centerOf(btn)
-    fx.floatEmoji(r.emoji, { x: x + rand(-8, 8), y })
+    fx.floatIcon(r.key, { x: x + rand(-8, 8), y })
     btn.classList.remove('is-bump')
     void btn.offsetWidth
     btn.classList.add('is-bump')
@@ -236,7 +221,11 @@ export function renderWishes(root, ctx) {
               if (e.detail === 0) tap(r) // bấm bằng bàn phím
             },
           },
-        }, h('span', { class: 'reaction__emoji', text: r.emoji }), countEls[r.key])
+        },
+          h('span', { class: 'reaction__icon', html: reactionIconSvg(r.key, 18) }),
+          countEls[r.key],
+          h('span', { class: 'reaction__label', text: r.label }),
+        )
         reactBtns[r.key] = btn
         return btn
       }),
@@ -250,7 +239,7 @@ export function renderWishes(root, ctx) {
     for (const r of REACTIONS) {
       for (let i = 0; i < diff[r.key] && budget > 0; i++, budget--) {
         setTimeout(() => {
-          fx.floatEmoji(r.emoji, {
+          fx.floatIcon(r.key, {
             x: rand(rect.left + 20, rect.right - 20),
             y: Math.min(rect.top + 30, window.innerHeight - 40),
           })
@@ -314,7 +303,7 @@ export function renderWishes(root, ctx) {
     }
     sendBtn.disabled = true
     try {
-      const wish = await api.sendWish({ name, message: text, emoji: chosen, slug: guest?.slug, website: honeypot.value })
+      const wish = await api.sendWish({ name, message: text, slug: guest?.slug, website: honeypot.value })
       if (!guest) store.set(NAME_KEY, name)
       message.value = ''
       message.dispatchEvent(new Event('input'))
@@ -322,8 +311,8 @@ export function renderWishes(root, ctx) {
       paintCount()
       list.scrollTo({ top: 0, behavior: 'smooth' })
       const { x, y } = centerOf(sendBtn)
-      for (let i = 0; i < 10; i++) setTimeout(() => fx.floatEmoji(chosen, { x: x + rand(-30, 30), y }), i * 70)
-      toast(`Đã gửi lời chúc đến ${short} 💙`, 'success')
+      for (let i = 0; i < 10; i++) setTimeout(() => fx.floatIcon('tim', { x: x + rand(-30, 30), y }), i * 70)
+      toast(`Đã gửi lời chúc đến ${short}`, 'success')
     } catch (err) {
       toast(err.message, 'error')
     } finally {
@@ -331,6 +320,13 @@ export function renderWishes(root, ctx) {
     }
   })
 
-  root.append(sectionHead('Sổ lưu bút', `Gửi lời chúc đến ${short}`), form, bar, wall)
+  root.append(
+    h('div', { class: 'wishes__moon', attrs: { 'aria-hidden': 'true' }, html: tsukuyomiMoonSvg() }),
+    characterHead({ n: 5, label: 'Sổ lời chúc', character: 'madara' }),
+    h('h2', { class: 'section-title', attrs: { 'data-reveal': '' } }, 'Mỗi lời chúc', h('br'), 'là một giấc mơ'),
+    form,
+    bar,
+    wall,
+  )
   paintCount()
 }

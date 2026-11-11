@@ -7,6 +7,7 @@ import './styles/invite.css'
 import './styles/closing.css'
 import './styles/schedule.css'
 import './styles/venue.css'
+import './styles/rsvp.css'
 import './styles/wishes.css'
 
 import baseContent from '../content.js'
@@ -28,7 +29,7 @@ import { renderGallery } from './sections/gallery.js'
 import { renderRsvp } from './sections/rsvp.js'
 import { renderWishes } from './sections/wishes.js'
 import { renderContact } from './sections/contact.js'
-import { floatEmoji } from './fx/floaters.js'
+import { floatIcon } from './fx/float-icons.js'
 import { renderClosing } from './sections/closing.js'
 import { printEasterEgg } from './fx/easter-egg.js'
 
@@ -103,7 +104,7 @@ async function boot() {
     displayName: displayName(null),
     // Mạng chậm/treo thì sau 2,5 giây dùng thiệp chung, không để khách chờ mãi.
     guestReady,
-    fx: { burst() {}, floatEmoji() {} },
+    fx: { floatIcon },
     /** Chạy khi thiệp đã mở xong (đăng ký sau lúc mở thì chạy ngay). */
     onOpen: (cb) => (opened ? safe(cb) : openCallbacks.push(cb)),
     emitOpen() {
@@ -116,8 +117,6 @@ async function boot() {
     emitTap: () => tapCallbacks.splice(0).forEach(safe),
   }
 
-  ctx.fx.burst = () => {} // tạm thời: rsvp.js cũ còn gọi, Task 7 bỏ
-  ctx.fx.floatEmoji = floatEmoji
   const music = createMusic(content.music, { reducedMotion })
   ctx.music = music
   ctx.onTap(() => music.start())

@@ -38,3 +38,6 @@ test('icon cảm xúc', () => {
   expect(reactionIconSvg('katon', 20)).toContain('width="20"')
   expect(() => reactionIconSvg('phao')).toThrow()
 })
+
+import { REACTION_KEYS } from '../shared/constants.js'
+test('mỗi cảm xúc có icon', () => expect(Object.keys(REACTION_ICONS)).toEqual(REACTION_KEYS))

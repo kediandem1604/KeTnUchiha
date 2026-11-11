@@ -1,12 +1,11 @@
 // Hằng số dùng chung cho trang thiệp và máy chủ.
 
 export const REACTIONS = [
-  { key: 'tim', emoji: '❤️', label: 'Thả tim' },
-  { key: 'phao', emoji: '🎉', label: 'Pháo hoa' },
-  { key: 'votay', emoji: '👏', label: 'Vỗ tay' },
-  { key: 'xucdong', emoji: '🥹', label: 'Xúc động' },
-  { key: 'mu', emoji: '🎓', label: 'Mũ tốt nghiệp' },
-  { key: 'hoa', emoji: '💐', label: 'Tặng hoa' },
+  { key: 'tim', label: 'Thương' },
+  { key: 'katon', label: 'Katon' },
+  { key: 'sharingan', label: 'Sharingan' },
+  { key: 'votay', label: 'Vỗ tay' },
+  { key: 'mu', label: 'Tốt nghiệp' },
 ]
 
 export const REACTION_KEYS = REACTIONS.map((r) => r.key)

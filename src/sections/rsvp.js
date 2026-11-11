@@ -1,6 +1,7 @@
-import { h, sectionHead, toast } from '../lib/dom.js'
+import { h, toast } from '../lib/dom.js'
 import { LIMITS } from '../../shared/constants.js'
-import { eventRange, formatDateDots } from '../lib/time.js'
+import { chidoriSvg } from '../art/motifs.js'
+import { characterHead } from './section-head.js'
 
 const STORE_KEY = 'thiep:rsvp'
 
@@ -19,12 +20,10 @@ const writeStored = (v) => {
   }
 }
 
-const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1)
-
+/** 04 · Xác nhận tham dự — Sasuke giữ, tia Chidori khi bấm "Mình sẽ đến". */
 export function renderRsvp(root, ctx) {
   const { guest, api } = ctx
   const short = ctx.content.graduate.shortName
-  const day = formatDateDots(eventRange(ctx.content.event).start).slice(0, 5).replace('.', '/')
   let stored = guest ? null : readStored()
   let attending = guest ? guest.rsvp?.attending ?? null : stored?.attending ?? null
   let sending = false
@@ -32,7 +31,7 @@ export function renderRsvp(root, ctx) {
   const nameInput = guest
     ? null
     : h('input', {
-        class: 'field',
+        class: 'field rsvp__name',
         type: 'text',
         value: stored?.name || '',
         placeholder: 'Tên của bạn',
@@ -40,9 +39,10 @@ export function renderRsvp(root, ctx) {
         attrs: { 'aria-label': 'Tên của bạn', autocomplete: 'name' },
       })
 
-  const yes = h('button', { class: 'rsvp__btn', attrs: { type: 'button' } }, h('span', { class: 'rsvp__emoji', text: '🎓' }), h('span', { text: 'Mình sẽ đến' }))
-  const no = h('button', { class: 'rsvp__btn', attrs: { type: 'button' } }, h('span', { class: 'rsvp__emoji', text: '💌' }), h('span', { text: 'Tiếc quá, mình bận' }))
-  const thanks = h('p', { class: 'rsvp__thanks', attrs: { 'aria-live': 'polite' } })
+  const yes = h('button', { class: 'btn btn--red rsvp__btn rsvp__yes', attrs: { type: 'button' }, html: `<span>Mình sẽ đến</span>${chidoriSvg()}` })
+  const no = h('button', { class: 'btn btn--ghost rsvp__btn', attrs: { type: 'button' }, text: 'Tiếc quá, mình bận' })
+  const thanks = h('p', { class: 'rsvp__thanks mono', attrs: { 'aria-live': 'polite' } })
+  yes.addEventListener('animationend', () => yes.classList.remove('zap'))
 
   function paint() {
     yes.classList.toggle('is-on', attending === true)
@@ -50,12 +50,12 @@ export function renderRsvp(root, ctx) {
     yes.setAttribute('aria-pressed', String(attending === true))
     no.setAttribute('aria-pressed', String(attending === false))
     thanks.textContent =
-      attending === true ? `Hẹn gặp ${ctx.displayName} ngày ${day} nha! ${short} vui lắm 🎓`
-        : attending === false ? 'Tiếc quá, cảm ơn bạn đã báo nha 💙 Nhớ để lại lời chúc bên dưới nhé!'
+      attending === true ? `✓ Đã ghi nhận · Hẹn gặp ${ctx.displayName} nhé`
+        : attending === false ? `✓ Đã ghi nhận · Cảm ơn ${ctx.displayName} đã báo`
           : ''
   }
 
-  async function choose(value, btn) {
+  async function choose(value) {
     if (sending) return
     const body = { attending: value }
     if (guest) body.slug = guest.slug
@@ -80,8 +80,9 @@ export function renderRsvp(root, ctx) {
       }
       paint()
       if (value) {
-        const r = btn.getBoundingClientRect()
-        ctx.fx.burst({ x: r.left + r.width / 2, y: r.top, count: 50, caps: false, power: 0.7 })
+        yes.classList.remove('zap')
+        void yes.offsetWidth // chạy lại tia điện nếu bấm lần nữa
+        yes.classList.add('zap')
       }
     } catch (err) {
       toast(err.message, 'error')
@@ -91,14 +92,14 @@ export function renderRsvp(root, ctx) {
     }
   }
 
-  yes.addEventListener('click', () => choose(true, yes))
-  no.addEventListener('click', () => choose(false, no))
+  yes.addEventListener('click', () => choose(true))
+  no.addEventListener('click', () => choose(false))
   paint()
 
   root.append(
-    sectionHead('Xác nhận tham dự', `${capitalize(ctx.displayName)} sẽ đến chứ?`),
-    h('div', { class: 'card rsvp', attrs: { 'data-reveal': '' } },
-      h('p', { class: 'rsvp__lead muted', text: `Cho ${short} biết để chuẩn bị thật chu đáo nha` }),
+    characterHead({ n: 4, label: 'Xác nhận tham dự', character: 'sasuke' }),
+    h('h2', { class: 'section-title', attrs: { 'data-reveal': '' }, text: 'Bạn sẽ đến chứ?' }),
+    h('div', { class: 'rsvp', attrs: { 'data-reveal': '' } },
       nameInput,
       h('div', { class: 'rsvp__choices' }, yes, no),
       thanks,
