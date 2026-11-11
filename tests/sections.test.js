@@ -18,3 +18,7 @@ test('trang thiệp nạp CSS chibi; bầy quạ đứng yên ở lời mời đ
   expect(fs.readFileSync('src/main.js', 'utf8')).toContain("import './styles/chibi.css'")
   expect(fs.readFileSync('src/sections/invite.js', 'utf8')).not.toContain('crowsSvg')
 })
+
+test('đầu mục không ghi tên nhân vật (chỉ còn con mắt và dòng "0N · TÊN PHẦN")', () => {
+  expect(fs.readFileSync('src/sections/section-head.js', 'utf8')).not.toContain('char-head__who')
+})

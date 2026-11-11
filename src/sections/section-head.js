@@ -1,13 +1,12 @@
 import { h, watchVisible } from '../lib/dom.js'
-import { CHARACTERS, eyeBadgeSvg } from '../art/mangekyo.js'
+import { eyeBadgeSvg } from '../art/mangekyo.js'
 import { chibiSvg } from '../art/chibi/index.js'
 
 /**
- * Đầu mục của phần có nhân vật giữ: con mắt Mangekyō (chạm thì xoay một vòng),
- * dòng "0N · TÊN PHẦN" và dòng "Tên · katakana · thuật".
+ * Đầu mục của phần có nhân vật giữ: con mắt Mangekyō (chạm thì xoay một vòng)
+ * và dòng "0N · TÊN PHẦN". Không ghi tên nhân vật: chibi bên cạnh đã cho biết là ai.
  */
 export function characterHead({ n, label, character }) {
-  const c = CHARACTERS[character]
   const eye = h('span', { class: 'char-head__eye', html: eyeBadgeSvg(character, 40) })
   eye.addEventListener('click', () => {
     eye.classList.remove('is-spin')
@@ -20,12 +19,6 @@ export function characterHead({ n, label, character }) {
     eye,
     h('div', {},
       h('p', { class: 'char-head__index mono', text: `0${n} · ${label}` }),
-      h('p', { class: 'char-head__who' },
-        h('b', { text: c.name }),
-        ' · ',
-        h('span', { class: 'jp', text: c.katakana }),
-        c.technique ? ` · ${c.technique}` : null,
-      ),
     ),
   )
 }
