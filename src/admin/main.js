@@ -1,4 +1,4 @@
-import '../styles/admin/fonts.css'
+import '../styles/fonts.css'
 import '../styles/admin/tokens.css'
 import '../styles/admin/base.css'
 import '../styles/admin/sections.css'

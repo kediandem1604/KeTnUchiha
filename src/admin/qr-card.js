@@ -1,82 +1,52 @@
-// Thiệp QR có tên: ảnh 1080×1350 (nền trời, "Thân mời [tên]", mã QR, tên lễ, ngày giờ).
+// Thiệp QR có tên: ảnh 1080×1350 kiểu Uchiha (nền mực, gia huy, Sharingan, "Thân gửi [tên]", mã QR trên nền ngà).
 // File này chỉ được tải khi bấm nút QR, nên trang quản lí mở nhanh như cũ.
 import { h, toast } from '../lib/dom.js'
 import { icons } from '../lib/icons.js'
 import { qrMatrix, qrCardTexts, qrFileName, fitFontSize } from '../lib/qr.js'
+import { crestSvg } from '../art/crest.js'
+import { eyeBadgeSvg } from '../art/mangekyo.js'
 
 const W = 1080
 const H = 1350
-const NAVY = '#13304f'
-const BLUE = '#2378c2'
-const SOFT = '#4a6585'
-const SCRIPT = '"Great Vibes", cursive'
-const DISPLAY = '"Playfair Display", Georgia, serif'
-const BODY = 'Quicksand, system-ui, sans-serif'
+const INK = '#0c0a0a'
+const BONE = '#ebe3d5'
+const ASH = '#857a71'
+const DISPLAY = '"Noto Serif Display", Georgia, serif'
+const BODY = '"Be Vietnam Pro", system-ui, sans-serif'
+const MONO = '"JetBrains Mono", ui-monospace, monospace'
 
 /** Nạp sẵn font (kèm bảng chữ tiếng Việt) trước khi vẽ lên canvas. */
 async function loadFonts(t) {
   const all = Object.values(t).join(' ')
   try {
     await Promise.all([
-      document.fonts.load(`110px ${SCRIPT}`, t.name),
+      document.fonts.load(`500 96px ${DISPLAY}`, t.name),
       document.fonts.load(`italic 400 44px ${DISPLAY}`, t.lead),
-      document.fonts.load(`600 46px ${DISPLAY}`, t.title),
-      document.fonts.load(`600 32px ${BODY}`, all),
-      document.fonts.load(`500 26px ${BODY}`, t.link),
+      document.fonts.load(`500 36px ${DISPLAY}`, t.title),
+      document.fonts.load(`400 28px ${BODY}`, all),
+      document.fonts.load(`400 26px ${MONO}`, `${t.eyebrow} ${t.link} ${t.hint}`),
     ])
   } catch {
     /* thiếu font thì vẽ bằng font dự phòng */
   }
 }
 
-function cloud(ctx, x, y, s, alpha) {
-  ctx.save()
-  ctx.globalAlpha = alpha
-  ctx.fillStyle = '#fff'
-  ctx.beginPath()
-  ctx.arc(x, y, 44 * s, 0, Math.PI * 2)
-  ctx.arc(x + 52 * s, y - 18 * s, 58 * s, 0, Math.PI * 2)
-  ctx.arc(x + 110 * s, y + 4 * s, 40 * s, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.beginPath()
-  ctx.roundRect(x - 40 * s, y, 190 * s, 44 * s, 22 * s)
-  ctx.fill()
-  ctx.restore()
-}
-
-function cap(ctx, x, y) {
-  ctx.save()
-  ctx.translate(x, y)
-  ctx.rotate(-0.12)
-  ctx.fillStyle = '#21497a'
-  ctx.beginPath()
-  ctx.moveTo(-34, 6)
-  ctx.lineTo(-34, 24)
-  ctx.quadraticCurveTo(0, 42, 34, 24)
-  ctx.lineTo(34, 6)
-  ctx.closePath()
-  ctx.fill()
-  ctx.fillStyle = NAVY
-  ctx.beginPath()
-  ctx.moveTo(0, -26)
-  ctx.lineTo(58, 0)
-  ctx.lineTo(0, 24)
-  ctx.lineTo(-58, 0)
-  ctx.closePath()
-  ctx.fill()
-  ctx.strokeStyle = '#f2c46d'
-  ctx.lineWidth = 4
-  ctx.lineCap = 'round'
-  ctx.beginPath()
-  ctx.moveTo(0, 0)
-  ctx.lineTo(46, 4)
-  ctx.lineTo(46, 34)
-  ctx.stroke()
-  ctx.fillStyle = '#f2c46d'
-  ctx.beginPath()
-  ctx.arc(46, 40, 6, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.restore()
+/** Chuỗi SVG → ảnh để vẽ lên canvas. */
+export function svgImage(svg) {
+  const src = svg.includes('xmlns=') ? svg : svg.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ')
+  const url = URL.createObjectURL(new Blob([src], { type: 'image/svg+xml' }))
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+      resolve(img)
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error('svg'))
+    }
+    img.src = url
+  })
 }
 
 function text(ctx, str, y, font, color, maxWidth = 960) {
@@ -85,76 +55,73 @@ function text(ctx, str, y, font, color, maxWidth = 960) {
   ctx.fillText(str, W / 2, y, maxWidth)
 }
 
-/** Vẽ thiệp QR lên canvas. */
-export function drawQrCard(canvas, t, matrix) {
+function spaced(ctx, px) {
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${px}px`
+}
+
+/** Vẽ thiệp QR lên canvas. `art` = { crest, eye } (ảnh đã nạp). */
+export function drawQrCard(canvas, t, matrix, art) {
   canvas.width = W
   canvas.height = H
   const ctx = canvas.getContext('2d')
   ctx.textAlign = 'center'
   ctx.textBaseline = 'alphabetic'
 
-  // Trời, nắng, mây
-  const sky = ctx.createLinearGradient(0, 0, 0, H)
-  sky.addColorStop(0, '#8fcdfb')
-  sky.addColorStop(0.6, '#d6edff')
-  sky.addColorStop(1, '#fff2ea')
-  ctx.fillStyle = sky
+  // Nền mực + nhiễu hạt
+  ctx.fillStyle = INK
   ctx.fillRect(0, 0, W, H)
-  const sun = ctx.createRadialGradient(900, 150, 0, 900, 150, 380)
-  sun.addColorStop(0, 'rgba(255,251,234,0.95)')
-  sun.addColorStop(1, 'rgba(255,251,234,0)')
-  ctx.fillStyle = sun
-  ctx.fillRect(0, 0, W, H)
-  cloud(ctx, 90, 120, 1, 0.85)
-  cloud(ctx, 880, 520, 0.8, 0.7)
-  cloud(ctx, 60, 760, 0.7, 0.6)
+  ctx.fillStyle = 'rgba(235, 227, 213, 0.05)'
+  for (let i = 0; i < 6000; i++) ctx.fillRect(Math.random() * W, Math.random() * H, 1, 1)
 
-  // Đầu thiệp
-  cap(ctx, W / 2, 62)
-  if ('letterSpacing' in ctx) ctx.letterSpacing = '8px'
-  text(ctx, t.eyebrow, 150, `600 30px ${BODY}`, BLUE)
-  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px'
-  text(ctx, t.lead, 218, `italic 400 44px ${DISPLAY}`, SOFT)
+  // Đầu thiệp: gia huy, dòng mono, con mắt
+  ctx.drawImage(art.crest, W / 2 - 32, 56, 64, 80)
+  spaced(ctx, 8)
+  text(ctx, t.eyebrow, 190, `400 26px ${MONO}`, ASH)
+  spaced(ctx, 0)
+  ctx.drawImage(art.eye, W / 2 - 90, 222, 180, 180)
+
+  // Thân gửi + tên
+  text(ctx, t.lead, 468, `italic 400 44px ${DISPLAY}`, ASH)
   const size = fitFontSize((s, px) => {
-    ctx.font = `${px}px ${SCRIPT}`
+    ctx.font = `500 ${px}px ${DISPLAY}`
     return ctx.measureText(s).width
-  }, t.name, 900, 120, 56)
-  text(ctx, t.name, 330, `${size}px ${SCRIPT}`, NAVY)
+  }, t.name, 900, 96, 48)
+  text(ctx, t.name, 558, `500 ${size}px ${DISPLAY}`, BONE)
 
-  // Khung trắng chứa mã QR
-  const box = 680
+  // Ô ngà chứa mã QR (vùng trắng quanh mã ≥ 4 ô)
+  const box = 560
   const bx = (W - box) / 2
-  const by = 370
-  ctx.save()
-  ctx.shadowColor = 'rgba(19,48,79,0.18)'
-  ctx.shadowBlur = 40
-  ctx.shadowOffsetY = 12
-  ctx.fillStyle = '#fff'
+  const by = 598
+  ctx.fillStyle = BONE
   ctx.beginPath()
-  ctx.roundRect(bx, by, box, box, 44)
+  ctx.roundRect(bx, by, box, box, 24)
   ctx.fill()
-  ctx.restore()
   const n = matrix.length
-  const cell = Math.floor((box - 100) / n)
-  const qx = bx + (box - cell * n) / 2
-  const qy = by + (box - cell * n) / 2
-  ctx.fillStyle = NAVY
+  const cell = Math.floor(box / (n + 8))
+  const qx = bx + Math.round((box - cell * n) / 2)
+  const qy = by + Math.round((box - cell * n) / 2)
+  ctx.fillStyle = INK
   for (let r = 0; r < n; r++)
     for (let c = 0; c < n; c++) if (matrix[r][c]) ctx.fillRect(qx + c * cell, qy + r * cell, cell, cell)
 
   // Chân thiệp
-  text(ctx, t.hint, 1112, `600 32px ${BODY}`, SOFT)
-  text(ctx, t.title, 1190, `600 46px ${DISPLAY}`, NAVY)
-  text(ctx, t.date, 1248, `600 34px ${BODY}`, BLUE)
-  text(ctx, t.link, 1302, `500 26px ${BODY}`, SOFT)
+  spaced(ctx, 4)
+  text(ctx, t.hint.toUpperCase(), 1196, `400 20px ${MONO}`, ASH)
+  spaced(ctx, 0)
+  text(ctx, t.title, 1246, `500 34px ${DISPLAY}`, BONE)
+  text(ctx, t.date, 1288, `400 26px ${BODY}`, ASH)
+  text(ctx, t.link, 1326, `400 20px ${MONO}`, ASH)
 }
 
 /** Mở hộp xem thiệp QR với nút Tải ảnh / Chia sẻ. `slug` null = link chung. */
 export async function openQrCard({ name, slug, link, content }) {
   const t = qrCardTexts({ name, content, link })
-  await loadFonts(t)
+  const [art] = await Promise.all([
+    Promise.all([svgImage(crestSvg({ size: 64 })), svgImage(eyeBadgeSvg('sharingan', 180))]).then(([crest, eye]) => ({ crest, eye })),
+    loadFonts(t),
+  ])
   const canvas = document.createElement('canvas')
-  drawQrCard(canvas, t, qrMatrix(link))
+  drawQrCard(canvas, t, qrMatrix(link), art)
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'))
   if (!blob) throw new Error('canvas')
   const url = URL.createObjectURL(blob)

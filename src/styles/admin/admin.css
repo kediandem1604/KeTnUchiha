@@ -1,5 +1,5 @@
 body {
-  background: linear-gradient(180deg, #cfe9ff 0%, #eaf6ff 40%, #f6fbff 100%) fixed;
+  background: #0c0a0a;
 }
 
 #admin {
@@ -38,7 +38,7 @@ body {
 }
 
 .btn--danger {
-  color: #b23a48;
+  color: var(--red-text);
 }
 
 /* ── Đăng nhập ────────────────────────────────────────── */
@@ -74,7 +74,7 @@ body {
 .login__error {
   margin: 0;
   min-height: 1.4em;
-  color: #b23a48;
+  color: var(--red-text);
   font-weight: 600;
   font-size: 14px;
 }
@@ -128,7 +128,7 @@ body {
   gap: 2px;
   padding: 12px 4px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--card);
   box-shadow: var(--shadow-sm);
   text-align: center;
 }
@@ -165,7 +165,7 @@ body {
   padding: 5px;
   margin-bottom: 16px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--card);
   box-shadow: var(--shadow-sm);
 }
 
@@ -180,7 +180,7 @@ body {
 }
 
 .tab[aria-selected='true'] {
-  color: var(--white);
+  color: var(--ink);
   background: linear-gradient(135deg, var(--sky-500), var(--sky-600));
 }
 
@@ -285,7 +285,7 @@ body {
 
 .guest--edit {
   border-color: var(--sky-300);
-  box-shadow: 0 0 0 3px rgba(95, 182, 242, 0.15);
+  box-shadow: 0 0 0 3px rgba(194, 29, 36, 0.25);
 }
 
 .guest--edit p {
@@ -347,7 +347,7 @@ body {
 
 .badge--idle {
   color: var(--ink-soft);
-  background: #eef2f6;
+  background: var(--sky-100);
 }
 
 .badge--open {
@@ -356,13 +356,13 @@ body {
 }
 
 .badge--yes {
-  color: #1f7a52;
-  background: #dcf5e8;
+  color: var(--ink);
+  background: rgba(235, 227, 213, 0.12);
 }
 
 .badge--no {
-  color: #a3364a;
-  background: #fde4ea;
+  color: var(--red-text);
+  background: rgba(194, 29, 36, 0.15);
 }
 
 /* ── Lời chúc & xác nhận ──────────────────────────────── */
@@ -481,7 +481,7 @@ body {
   gap: 10px;
   padding: 10px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--card);
   border: 1px solid var(--card-border);
   box-shadow: var(--shadow);
   backdrop-filter: blur(8px);
@@ -520,13 +520,13 @@ body {
   padding: 14px;
   border: 0;
   border-radius: 24px;
-  background: #fff;
+  background: var(--card);
   box-shadow: var(--shadow);
   overflow: auto;
 }
 
 .qr-dialog::backdrop {
-  background: rgba(19, 48, 79, 0.45);
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(3px);
 }
 
@@ -554,4 +554,20 @@ body {
   color: var(--ink-soft);
   font-size: 13.5px;
   font-weight: 600;
+}
+
+/* Nút chính đỏ Uchiha, chữ ngà */
+.btn--primary {
+  background: #a3141a;
+  color: #ebe3d5;
+}
+
+/* Chữ nhỏ phải đủ tương phản trên nền mực */
+.linkish,
+.guest__link {
+  color: var(--red-text);
+}
+
+.btn--ghost {
+  color: var(--ink);
 }

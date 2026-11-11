@@ -1,5 +1,5 @@
 import { h } from '../lib/dom.js'
-import { capSvg } from '../lib/icons.js'
+import { crestSvg } from '../art/crest.js'
 import { createAdminApi } from '../lib/api.js'
 
 /** Màn đăng nhập. onSuccess(password, overviewData) khi mật khẩu đúng. */
@@ -14,7 +14,7 @@ export function renderLogin(root, onSuccess, message = '') {
   const btn = h('button', { class: 'btn btn--primary', attrs: { type: 'submit' }, text: 'Vào trang quản lí' })
 
   const form = h('form', { class: 'card login' },
-    h('div', { class: 'login__icon', html: capSvg(44, '#2378c2') }),
+    h('div', { class: 'login__icon', html: crestSvg({ size: 44 }) }),
     h('h1', { class: 'login__title', text: 'Quản lí thiệp mời' }),
     h('p', { class: 'muted login__sub', text: 'Nhập mật khẩu để tạo link mời và xem lời chúc' }),
     input,

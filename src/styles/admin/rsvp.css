@@ -18,7 +18,7 @@
 .field:focus {
   outline: none;
   border-color: var(--sky-400);
-  box-shadow: 0 0 0 4px rgba(95, 182, 242, 0.18);
+  box-shadow: 0 0 0 3px rgba(194, 29, 36, 0.25);
 }
 
 textarea.field {
@@ -63,10 +63,10 @@ textarea.field {
 }
 
 .rsvp__btn.is-on {
-  color: var(--white);
+  color: var(--ink);
   border-color: transparent;
   background: linear-gradient(135deg, var(--sky-500), var(--sky-600));
-  box-shadow: 0 10px 24px rgba(35, 120, 194, 0.32);
+  box-shadow: none;
 }
 
 .rsvp__btn:disabled {

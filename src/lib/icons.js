@@ -29,7 +29,3 @@ export const icons = {
   left: svg('<path d="m15 5-7 7 7 7"/>'),
   right: svg('<path d="m9 5 7 7-7 7"/>'),
 }
-
-/** Mũ tốt nghiệp (tô màu) */
-export const capSvg = (size = 28, color = '#13304F', tassel = '#F2C46D') =>
-  `<svg viewBox="0 0 64 48" width="${size}" height="${(size * 48) / 64}" aria-hidden="true"><path d="M32 4 2 17l30 13 30-13z" fill="${color}"/><path d="M14 23v11c0 4 8 8 18 8s18-4 18-8V23l-18 8z" fill="${color}" opacity=".88"/><path d="M58 18.5V33" stroke="${tassel}" stroke-width="2.4" stroke-linecap="round"/><circle cx="58" cy="35" r="3.2" fill="${tassel}"/><circle cx="32" cy="17" r="2.6" fill="${tassel}"/></svg>`

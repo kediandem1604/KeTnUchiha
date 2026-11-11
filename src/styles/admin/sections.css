@@ -59,7 +59,7 @@
 
 .card {
   position: relative;
-  background: rgba(255, 255, 255, 0.84);
+  background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -98,9 +98,9 @@
 }
 
 .btn--primary {
-  color: var(--white);
+  color: var(--ink);
   background: linear-gradient(135deg, var(--sky-500), var(--sky-600));
-  box-shadow: 0 10px 24px rgba(35, 120, 194, 0.32);
+  box-shadow: none;
 }
 
 .btn--ghost {
@@ -130,7 +130,7 @@
     transform: translateY(-2px);
   }
   .btn--primary:not(:disabled):hover {
-    box-shadow: 0 14px 30px rgba(35, 120, 194, 0.4);
+    box-shadow: none;
   }
 }
 
@@ -166,7 +166,7 @@
   height: 50px;
   padding: 0 12px 0 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--card);
   border: 1px solid var(--card-border);
   box-shadow: var(--shadow);
   opacity: 0;
@@ -227,7 +227,7 @@
   width: min(280px, calc(100vw - 28px));
   padding: 8px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--card);
   border: 1px solid var(--card-border);
   box-shadow: var(--shadow);
   opacity: 0;

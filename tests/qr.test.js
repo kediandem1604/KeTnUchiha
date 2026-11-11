@@ -19,9 +19,9 @@ function decode(matrix, scale = 4, quiet = 4) {
 }
 
 test.each([
-  'https://ngocthamtn.netlify.app/minh-tri',
-  'https://ngocthamtn.netlify.app/',
-  'https://ngocthamtn.netlify.app/nguyen-thi-thanh-huong-tran-ngoc-bao-anh-2',
+  'https://tienquoc-totnghiep.netlify.app/minh-tri',
+  'https://tienquoc-totnghiep.netlify.app/',
+  'https://tienquoc-totnghiep.netlify.app/nguyen-thi-thanh-huong-tran-ngoc-bao-anh-2',
 ])('mã QR đọc ngược ra đúng link %s', (url) => {
   const m = qrMatrix(url)
   expect(m.length).toBeGreaterThanOrEqual(21)
@@ -30,22 +30,22 @@ test.each([
 })
 
 const content = {
-  graduate: { fullName: 'Ngọc Thắm' },
+  graduate: { fullName: 'Nguyễn Tiến Quốc' },
   event: { date: '2026-11-26', start: '14:00', end: '16:00' },
 }
 
 test('chữ trên thiệp QR theo khách và cài đặt', () => {
-  expect(qrCardTexts({ name: 'Minh Trí', content, link: 'https://ngocthamtn.netlify.app/minh-tri' })).toEqual({
-    eyebrow: 'THƯ MỜI TỐT NGHIỆP',
-    lead: 'Thân mời',
+  expect(qrCardTexts({ name: 'Minh Trí', content, link: 'https://tienquoc-totnghiep.netlify.app/minh-tri' })).toEqual({
+    eyebrow: 'THƯ MỜI TỐT NGHIỆP · 2026',
+    lead: 'Thân gửi',
     name: 'Minh Trí',
     hint: 'Quét mã để mở thiệp',
-    title: 'Lễ tốt nghiệp · Ngọc Thắm',
+    title: 'Lễ tốt nghiệp · Nguyễn Tiến Quốc',
     date: 'Thứ Năm, 26/11/2026 · 14:00 chiều',
-    link: 'ngocthamtn.netlify.app/minh-tri',
+    link: 'tienquoc-totnghiep.netlify.app/minh-tri',
   })
-  expect(qrCardTexts({ name: null, content, link: 'https://ngocthamtn.netlify.app/' }).name).toBe('bạn')
-  expect(qrCardTexts({ name: null, content, link: 'https://ngocthamtn.netlify.app/' }).link).toBe('ngocthamtn.netlify.app')
+  expect(qrCardTexts({ name: null, content, link: 'https://tienquoc-totnghiep.netlify.app/' }).name).toBe('bạn')
+  expect(qrCardTexts({ name: null, content, link: 'https://tienquoc-totnghiep.netlify.app/' }).link).toBe('tienquoc-totnghiep.netlify.app')
 })
 
 test('tên file ảnh QR', () => {

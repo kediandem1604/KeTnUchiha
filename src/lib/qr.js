@@ -12,13 +12,14 @@ export function qrMatrix(text) {
 
 /** Chữ trên thiệp QR; `name` = tên khách (null → link chung, ghi "bạn"). */
 export function qrCardTexts({ name, content, link }) {
+  const start = eventRange(content.event).start
   return {
-    eyebrow: 'THƯ MỜI TỐT NGHIỆP',
-    lead: 'Thân mời',
+    eyebrow: `THƯ MỜI TỐT NGHIỆP · ${start.getUTCFullYear()}`,
+    lead: 'Thân gửi',
     name: name || 'bạn',
     hint: 'Quét mã để mở thiệp',
     title: `Lễ tốt nghiệp · ${content.graduate.fullName}`,
-    date: `${longDateVi(eventRange(content.event).start)} · ${timeOfDay(content.event.start)}`,
+    date: `${longDateVi(start)} · ${timeOfDay(content.event.start)}`,
     link: link.replace(/^https?:\/\//, '').replace(/\/$/, ''),
   }
 }
