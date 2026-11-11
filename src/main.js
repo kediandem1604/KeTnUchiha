@@ -1,14 +1,11 @@
 import './styles/fonts.css'
 import './styles/tokens.css'
 import './styles/base.css'
-import './styles/sky.css'
-import './styles/sections.css'
 import './styles/cover.css'
 import './styles/hero.css'
 import './styles/info.css'
 import './styles/schedule.css'
 import './styles/venue.css'
-import './styles/rsvp.css'
 import './styles/wishes.css'
 
 import baseContent from '../content.js'
@@ -19,7 +16,6 @@ import { h, prefersReducedMotion } from './lib/dom.js'
 import { parseRoute } from './lib/route.js'
 import { displayName, pageTitle } from './lib/text.js'
 import { withTimeout } from './lib/async.js'
-import { initSky } from './fx/sky.js'
 import { initReveal } from './fx/reveal.js'
 import { createMusic } from './sections/music.js'
 import { createConfetti } from './fx/confetti.js'
@@ -79,7 +75,6 @@ async function boot() {
 
   const reducedMotion = prefersReducedMotion()
   const route = parseRoute(location)
-  initSky({ reducedMotion })
 
   // Tải tên khách và cài đặt cùng lúc. Bìa và nhạc cần cài đặt (tên, ngày, link nhạc)
   // nên chờ cài đặt, tối đa 2,5 giây; lỗi hoặc chậm thì dùng nội dung gốc trong content.js.

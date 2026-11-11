@@ -59,6 +59,24 @@ export function whenNear(el, fn, rootMargin = '200px 0px') {
   io.observe(el)
 }
 
+/**
+ * Gắn class "is-visible" khi phần tử đang trên màn hình và tab đang mở; gỡ khi ngược lại.
+ * Dùng để chỉ chạy hiệu ứng lặp (xoáy Kamui, quạ) lúc khách thật sự nhìn thấy.
+ */
+export function watchVisible(el) {
+  if (!('IntersectionObserver' in window)) {
+    el.classList.add('is-visible')
+    return
+  }
+  let inView = false
+  const update = () => el.classList.toggle('is-visible', inView && !document.hidden)
+  new IntersectionObserver((entries) => {
+    inView = entries.some((e) => e.isIntersecting)
+    update()
+  }).observe(el)
+  document.addEventListener('visibilitychange', update)
+}
+
 /** Tiêu đề section: dòng nhỏ + tiêu đề lớn + họa tiết mây. */
 export function sectionHead(eyebrow, title) {
   return h('header', { class: 'section-head', attrs: { 'data-reveal': '' } },
