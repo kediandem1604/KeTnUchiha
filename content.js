@@ -46,10 +46,10 @@ export default {
   //   Khách chưa đăng nhập Spotify chỉ nghe được 30 giây do Spotify tự chọn đoạn.
   // Có nhiều cái thì ưu tiên: file nhạc → YouTube → Spotify. Trống cả 3 thì không có nút nhạc.
   music: {
-    src: '',
-    youtube: '',
-    spotify: '',
-    title: '',
+    src: '/nhac/syn-ke.mp3', // đang dùng (giống thiệp Thắm): phát trên mọi máy, không hiện trình phát
+    youtube: 'https://www.youtube.com/watch?v=jNne1xPAHEY',
+    spotify: 'https://open.spotify.com/track/5w2XLlsTxumdmb6rhhSC3x',
+    title: '佩奇的夏天',
   },
 
   // Ảnh: chép vào public/anh/ rồi ghi đường dẫn, vd. '/anh/chan-dung.jpg'
