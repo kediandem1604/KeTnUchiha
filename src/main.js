@@ -12,6 +12,7 @@ import './styles/wishes.css'
 import './styles/gallery.css'
 import './styles/contact.css'
 import './styles/music.css'
+import './styles/chibi.css'
 
 import baseContent from '../content.js'
 import { mergeSettings } from '../shared/settings.js'

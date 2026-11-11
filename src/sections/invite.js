@@ -1,6 +1,5 @@
-import { h, watchVisible } from '../lib/dom.js'
-import { crowsSvg } from '../art/motifs.js'
-import { characterHead } from './section-head.js'
+import { h } from '../lib/dom.js'
+import { characterIntro } from './section-head.js'
 
 const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1)
 
@@ -12,13 +11,11 @@ export function renderInvite(root, ctx) {
 
   // append() gốc biến null thành chữ "null" nên phải lọc bỏ phần trống.
   const parts = [
-    h('div', { class: 'invite__crows', attrs: { 'aria-hidden': 'true' }, html: crowsSvg() }),
-    characterHead({ n: 1, label: 'Lời mời', character: 'itachi' }),
-    h('h2', { class: 'section-title', attrs: { 'data-reveal': '' } },
+    characterIntro({ n: 1, label: 'Lời mời', character: 'itachi', title: h('h2', { class: 'section-title', attrs: { 'data-reveal': '' } },
       h('span', { text: texts.inviteLead }),
       h('br'),
       h('span', { class: 'invite__guest', text: name }),
-    ),
+    ) }),
     h('p', { class: 'prose', attrs: { 'data-reveal': '' }, text: texts.inviteBody }),
     note
       ? h('figure', { class: 'invite__note', attrs: { 'data-reveal': '' } },
@@ -28,5 +25,4 @@ export function renderInvite(root, ctx) {
       : null,
   ]
   root.append(...parts.filter(Boolean))
-  watchVisible(root)
 }

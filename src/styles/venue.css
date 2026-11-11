@@ -1,6 +1,6 @@
 /* ── 03 · Địa điểm (Shisui) ──────────────────────────── */
 .venue__name {
-  font-size: clamp(21px, 6.2vw, 25px);
+  font-size: clamp(19px, 5.4vw, 23px);
 }
 
 .venue__addr {

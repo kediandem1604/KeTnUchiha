@@ -4,7 +4,7 @@ import { formatWishTime } from '../lib/time.js'
 import { LIMITS, REACTIONS } from '../../shared/constants.js'
 import { reactionIconSvg } from '../art/reaction-icons.js'
 import { tsukuyomiMoonSvg } from '../art/motifs.js'
-import { characterHead } from './section-head.js'
+import { characterIntro } from './section-head.js'
 import { createHoldTap } from '../lib/hold-tap.js'
 import { nextFlushDelay } from '../lib/reactions.js'
 
@@ -322,8 +322,7 @@ export function renderWishes(root, ctx) {
 
   root.append(
     h('div', { class: 'wishes__moon', attrs: { 'aria-hidden': 'true' }, html: tsukuyomiMoonSvg() }),
-    characterHead({ n: 5, label: 'Sổ lời chúc', character: 'madara' }),
-    h('h2', { class: 'section-title', attrs: { 'data-reveal': '' } }, 'Mỗi lời chúc', h('br'), 'là một giấc mơ'),
+    characterIntro({ n: 5, label: 'Sổ lời chúc', character: 'madara', title: h('h2', { class: 'section-title', attrs: { 'data-reveal': '' } }, 'Mỗi lời chúc', h('br'), 'là một giấc mơ') }),
     form,
     bar,
     wall,

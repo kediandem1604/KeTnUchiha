@@ -1,7 +1,7 @@
 import { h, toast } from '../lib/dom.js'
 import { LIMITS } from '../../shared/constants.js'
 import { chidoriSvg } from '../art/motifs.js'
-import { characterHead } from './section-head.js'
+import { characterIntro } from './section-head.js'
 
 const STORE_KEY = 'thiep:rsvp'
 
@@ -97,8 +97,7 @@ export function renderRsvp(root, ctx) {
   paint()
 
   root.append(
-    characterHead({ n: 4, label: 'Xác nhận tham dự', character: 'sasuke' }),
-    h('h2', { class: 'section-title', attrs: { 'data-reveal': '' }, text: 'Bạn sẽ đến chứ?' }),
+    characterIntro({ n: 4, label: 'Xác nhận tham dự', character: 'sasuke', title: h('h2', { class: 'section-title', attrs: { 'data-reveal': '' }, text: 'Bạn sẽ đến chứ?' }) }),
     h('div', { class: 'rsvp', attrs: { 'data-reveal': '' } },
       nameInput,
       h('div', { class: 'rsvp__choices' }, yes, no),

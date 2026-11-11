@@ -1,4 +1,28 @@
 /* ── Chibi kiểu tem giấy: hoạt ảnh nhẹ ────────────────── */
+
+/* Đầu phần: đầu mục + tiêu đề bên trái, chibi bên phải */
+.char-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 118px;
+  align-items: start;
+  column-gap: 10px;
+  margin-bottom: 6px;
+}
+
+.char-intro__main {
+  min-width: 0;
+}
+
+.char-intro .char-chibi {
+  margin-top: -8px;
+}
+
+@media (max-width: 360px) {
+  .char-intro {
+    grid-template-columns: minmax(0, 1fr) 96px;
+  }
+}
+
 .char-chibi {
   display: block;
   width: 100%;

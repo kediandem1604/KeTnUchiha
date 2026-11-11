@@ -1,5 +1,6 @@
-import { h } from '../lib/dom.js'
+import { h, watchVisible } from '../lib/dom.js'
 import { CHARACTERS, eyeBadgeSvg } from '../art/mangekyo.js'
+import { chibiSvg } from '../art/chibi/index.js'
 
 /**
  * Đầu mục của phần có nhân vật giữ: con mắt Mangekyō (chạm thì xoay một vòng),
@@ -27,4 +28,26 @@ export function characterHead({ n, label, character }) {
       ),
     ),
   )
+}
+
+/**
+ * Đầu phần có chibi: bên trái là đầu mục + tiêu đề (`title`), bên phải là chibi của nhân vật.
+ * Chibi chỉ chuyển động khi phần này đang trên màn hình; chạm vào thì nhún một cái.
+ */
+export function characterIntro({ n, label, character, title }) {
+  const chibi = h('span', { class: 'char-chibi', attrs: { 'aria-hidden': 'true' }, html: chibiSvg(character) })
+  chibi.addEventListener('click', () => {
+    chibi.classList.remove('is-poke')
+    void chibi.offsetWidth // chạy lại nếu chạm liên tiếp
+    chibi.classList.add('is-poke')
+  })
+  chibi.addEventListener('animationend', (e) => {
+    if (e.target === chibi.firstElementChild) chibi.classList.remove('is-poke')
+  })
+  const intro = h('div', { class: 'char-intro' },
+    h('div', { class: 'char-intro__main' }, characterHead({ n, label, character }), title),
+    chibi,
+  )
+  watchVisible(intro)
+  return intro
 }

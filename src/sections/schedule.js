@@ -1,7 +1,7 @@
 import { h, watchVisible } from '../lib/dom.js'
 import { icons } from '../lib/icons.js'
 import { kamuiSvg } from '../art/motifs.js'
-import { characterHead } from './section-head.js'
+import { characterIntro } from './section-head.js'
 import {
   eventRange, eventPhase, countdown, longDateWords, timeOfDay, googleCalendarUrl, buildIcs, formatTMinus,
 } from '../lib/time.js'
@@ -89,11 +89,10 @@ export function renderSchedule(root, ctx) {
   // append() gốc biến null thành chữ "null" nên phải lọc bỏ phần trống.
   const parts = [
     h('div', { class: 'schedule__kamui', attrs: { 'aria-hidden': 'true' }, html: kamuiSvg() }),
-    characterHead({ n: 2, label: 'Thời gian', character: 'obito' }),
-    h('div', { class: 'schedule__when', attrs: { 'data-reveal': '' } },
+    characterIntro({ n: 2, label: 'Thời gian', character: 'obito', title: h('div', { class: 'schedule__when', attrs: { 'data-reveal': '' } },
       h('p', { class: 'schedule__date', text: longDateWords(range.start) }),
       h('p', { class: 'schedule__time serif', text: timeOfDay(event.start) }),
-    ),
+    ) }),
     tiles,
     tminus,
     phaseMsg,

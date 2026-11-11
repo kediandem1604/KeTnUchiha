@@ -1,17 +1,17 @@
 import { h, whenNear } from '../lib/dom.js'
 import { mapEmbedUrl } from '../lib/maps.js'
-import { characterHead } from './section-head.js'
+import { characterIntro } from './section-head.js'
 
 /** 03 · Địa điểm — Shisui giữ, nút "Thuấn Thân tới đây". */
 export function renderVenue(root, ctx) {
   const { venue } = ctx.content
   const query = venue.mapQuery || [venue.name, venue.address].filter(Boolean).join(', ')
 
-  root.append(characterHead({ n: 3, label: 'Địa điểm', character: 'shisui' }))
+  const intro = (text) => characterIntro({ n: 3, label: 'Địa điểm', character: 'shisui', title: h('h2', { class: 'section-title venue__name', attrs: { 'data-reveal': '' }, text }) })
 
   if (!query) {
     root.append(
-      h('h2', { class: 'section-title venue__name', attrs: { 'data-reveal': '' }, text: 'Địa điểm sẽ được cập nhật sớm' }),
+      intro('Địa điểm sẽ được cập nhật sớm'),
       h('p', { class: 'prose', attrs: { 'data-reveal': '' }, text: 'Bạn mở lại thiệp này gần ngày lễ để xem bản đồ nhé.' }),
     )
     return
@@ -26,7 +26,7 @@ export function renderVenue(root, ctx) {
 
   // append() gốc biến null thành chữ "null" nên phải lọc bỏ phần trống.
   const parts = [
-    venue.name ? h('h2', { class: 'section-title venue__name', attrs: { 'data-reveal': '' }, text: venue.name }) : null,
+    intro(venue.name || 'Địa điểm'),
     venue.address ? h('p', { class: 'prose venue__addr', attrs: { 'data-reveal': '' }, text: venue.address }) : null,
     map,
     venue.coords ? h('p', { class: 'venue__coords mono', text: venue.coords }) : null,
